@@ -801,8 +801,7 @@ function UpdateServerWorldGenDataString()
     end
 
     --V2C: TODO: Likely to exceed data size limit with custom multilevel worlds
-
-    TheNet:SetWorldGenData(DataDumper(clusteroptions, nil, false))
+    TheNet:SetWorldGenData(DataDumper(ZipAndEncodeSaveData(clusteroptions), nil, true))
 end
 
 function GetDefaultServerData()
@@ -812,9 +811,9 @@ function GetDefaultServerData()
     --     return the desired value.
     return
     {
-        intention = TheNet:GetDefaultServerIntention(),
         pvp = TheNet:GetDefaultPvpSetting(),
         game_mode = TheNet:GetDefaultGameMode(),
+		playstyle = TheNet:GetServerPlaystyle(),
         online_mode = TheNet:IsOnlineMode(),
         encode_user_path = TheNet:GetDefaultEncodeUserPath(),
         use_legacy_session_path = nil,
@@ -851,7 +850,7 @@ function StartDedicatedServer()
         local serverdata = GetDefaultServerData()
 
         local function onsaved()
-            -- Collect the tags we want and set the tags string
+			TheNet:SetServerPlaystyle(ShardGameIndex:GetServerData().playstyle or PLAYSTYLE_DEFAULT)
             UpdateServerTagsString()
             StartNextInstance({ reset_action = RESET_ACTION.LOAD_SLOT, save_slot = slot })
         end

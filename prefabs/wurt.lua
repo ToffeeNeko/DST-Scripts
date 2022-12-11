@@ -175,6 +175,9 @@ local function OnPreLoad(inst, data)
 end
 
 local function CLIENT_Wurt_HostileTest(inst, target)
+	if target.HostileToPlayerTest ~= nil then
+		return target:HostileToPlayerTest(inst)
+	end
     return (target:HasTag("hostile") or target:HasTag("pig"))
         and not target:HasTag("merm") and not target:HasTag("manrabbit")
         and not target:HasTag("frog")
@@ -228,23 +231,6 @@ local function OnAttacked(inst, data)
     end
 end
 
-local function OnRepelMerm(doer, follower)
-    if follower.DoDisapproval then
-        follower:DoDisapproval()
-    end
-end
-
-local function OnMurdered(inst, data)
-    local victim = data.victim
-    if inst.components.repellent and
-        victim ~= nil  and victim:IsValid() and
-        victim:HasTag("fish") and
-        not inst.components.health:IsDead() then
-        -- This act is not looked too highly upon.
-        inst.components.repellent:Repel(inst)
-    end
-end
-
 local function master_postinit(inst)
     inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
@@ -269,12 +255,6 @@ local function master_postinit(inst)
 	inst:AddComponent("preserver")
 	inst.components.preserver:SetPerishRateMultiplier(FishPreserverRate)
 
-    inst:AddComponent("repellent")
-    inst.components.repellent:AddRepelTag("merm")
-    inst.components.repellent:AddIgnoreTag("mermking")
-    inst.components.repellent:SetOnlyRepelsFollowers(true)
-    inst.components.repellent:SetOnRepelFollowerFn(OnRepelMerm)
-
     if inst.components.eater ~= nil then
         inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN })
     end
@@ -286,7 +266,6 @@ local function master_postinit(inst)
     inst:ListenForEvent("onmermkingcreated", function() RoyalUpgrade(inst) end, TheWorld)
     inst:ListenForEvent("onmermkingdestroyed", function() RoyalDowngrade(inst) end, TheWorld)
     inst:ListenForEvent("onattacked", OnAttacked)
-    inst:ListenForEvent("murdered", OnMurdered)
 
     inst.OnSave = OnSave
     inst.OnPreLoad = OnPreLoad

@@ -64,6 +64,7 @@ return{
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDERS = "It seems we are lacking in participants.",
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDING_SPOTS = "This environment is not suitable for a fair game.",
 			KITCOON_HIDEANDSEEK_ONE_GAME_PER_DAY = "Playtime is over for now.",
+            MANNEQUIN_EQUIPSWAPFAILED = "No, that would be ridiculous.",
 		},
 		OPEN_CRAFTING =
 		{
@@ -383,6 +384,16 @@ return{
         {
             DOER_ISNT_MODULE_OWNER = "Hmph. It's not worth my time.",
         },
+
+		CAST_SPELLBOOK =
+		{
+			NO_TOPHAT = "I'll need a top hat for this trick to work.",
+		},
+
+		CASTAOE =
+		{
+			NO_MAX_SANITY = "I fear my mind can't take the strain...",
+		},
     },
 
 	ANNOUNCE_CANNOT_BUILD =
@@ -405,6 +416,13 @@ return{
 --fallback to speech_wilson.lua     ANNOUNCE_WAYTOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua     ANNOUNCE_NOWATERNEARBY = "only_used_by_waxwell_and_wicker",
 
+	--waxwell specific
+	ANNOUNCE_SHADOWLEVEL_ITEM = "\nMy shadow puppets should be able to draw from its power...",
+	ANNOUNCE_EQUIP_SHADOWLEVEL_T1 = "What's this? My shadow puppets feel just a bit stronger...",
+	ANNOUNCE_EQUIP_SHADOWLEVEL_T2 = "I can feel the strength of my shadow puppets growing.",
+	ANNOUNCE_EQUIP_SHADOWLEVEL_T3 = "Go, my shadow puppets! With this power, nothing will stand in our way.",
+	ANNOUNCE_EQUIP_SHADOWLEVEL_T4 = "The shadow puppets I summon will be unstoppable!",
+
     --wolfgang specific
 --fallback to speech_wilson.lua     ANNOUNCE_NORMALTOMIGHTY = "only_used_by_wolfang",
 --fallback to speech_wilson.lua     ANNOUNCE_NORMALTOWIMPY = "only_used_by_wolfang",
@@ -418,7 +436,7 @@ return{
 
 	ANNOUNCE_BEES = "Killing me won't bring back your honey!",
 	ANNOUNCE_BOOMERANG = "Ow! Blasted... clumsy hands!",
-	ANNOUNCE_CHARLIE = "Charlie? It's me! Maxwell!",
+	ANNOUNCE_CHARLIE = "I suppose it's best to keep up appearances...",
 	ANNOUNCE_CHARLIE_ATTACK = "Ow! Be gentle, Charlie!",
 --fallback to speech_wilson.lua 	ANNOUNCE_CHARLIE_MISSED = "only_used_by_winona", --winona specific
 	ANNOUNCE_COLD = "My heart grows cold.",
@@ -467,6 +485,8 @@ return{
 --fallback to speech_wilson.lua         SAME_OLD_5 = "only_used_by_warly",
 --fallback to speech_wilson.lua 		TASTY = "only_used_by_warly",
     },
+
+	ANNOUNCE_FOODMEMORY = "only_used_by_warly",
 
     ANNOUNCE_ENCUMBERED =
     {
@@ -854,6 +874,8 @@ return{
     ANNOUNCE_PIRATES_ARRIVE = "I don't like the sound of that...",
 
     ANNOUNCE_BOOK_MOON_DAYTIME = "We'll know if it worked once night falls.",
+
+    ANNOUNCE_OFF_SCRIPT = "She won't like that.",
 
 	BATTLECRY =
 	{
@@ -1445,7 +1467,19 @@ return{
 
         TURF_SHELLBEACH = "Turf.",
 
+		TURF_RUINSBRICK = "A stone floor.",
+		TURF_RUINSBRICK_GLOW = "Hmph. A cheap replica.",
+		TURF_RUINSTILES = "A stone floor.",
+		TURF_RUINSTILES_GLOW = "Hmph. A cheap replica.",
+		TURF_RUINSTRIM = "A stone floor.",
+		TURF_RUINSTRIM_GLOW = "Hmph. A cheap replica.",
+
         TURF_MONKEY_GROUND = "It doesn't belong here.",
+
+        TURF_CARPETFLOOR2 = "What was wrong with my carpet?",
+        TURF_MOSAIC_GREY = "A stone floor.",
+        TURF_MOSAIC_RED = "A stone floor.",
+        TURF_MOSAIC_BLUE = "A stone floor.",
 
 		POWCAKE = "What foul manifestation of evil is this?",
         CAVE_ENTRANCE = "I plugged it a long time ago.",
@@ -1629,6 +1663,10 @@ return{
             RARE = "A rare blueprint, indeed.",
         },
         SKETCH = "I'll need somewhere to sculpt it.",
+		COOKINGRECIPECARD = 
+		{
+			GENERIC = "The writing is too faint to read.",
+		},
 		BLUE_CAP = "What could go wrong?",
 		BLUE_CAP_COOKED = "Umami!",
 		BLUE_MUSHROOM =
@@ -1653,6 +1691,7 @@ return{
 		BUZZARD = "Carrion connoisseur.",
 
 		SHADOWDIGGER = "I'm a shadow of myself. Ha-ha!",
+        SHADOWDANCER = "What have I become.",
 
 		CACTUS =
 		{
@@ -1814,6 +1853,7 @@ return{
 		},
         GOGGLESHAT = "Not my sort of fashion.",
         DESERTHAT = "Function over form.",
+        ANTLIONHAT = "If the ground displeases me, I'll pull it up by the roots.",
 --fallback to speech_wilson.lua 		DEVTOOL = "It smells of bacon!",
 --fallback to speech_wilson.lua 		DEVTOOL_NODEV = "I'm not strong enough to wield it.",
 		DIRTPILE = "That looks out-of-place.",
@@ -2896,7 +2936,11 @@ return{
 		WATERMELON = "It's mostly water. Fibrous, sweet water.",
 		WATERMELON_COOKED = "Grillermelon.",
 		WATERMELONHAT = "This is one way to keep cool. And sticky.",
-		WAXWELLJOURNAL = "I'm so sorry, Charlie.",
+		WAXWELLJOURNAL =
+		{
+			GENERIC = "The show must go on.",
+			NEEDSFUEL = "It hungers for the fuel.",
+		},
 		WETGOOP = "How uncultured.",
         WHIP = "Makes me feel like the master again.",
 		WINTERHAT = "How disappointingly rustic.",
@@ -4426,7 +4470,7 @@ return{
             GENERIC = "My, this is some strange magic, even for me.",
             CRIMSON = "The fuel has taken hold.",
             ENABLED = "Just what manner of magic is this?!",
-			WAITING_FOR_DARK = "It's power is coalescing.",
+			WAITING_FOR_DARK = "Its power is coalescing.",
 			COOLDOWN = "I'd bet it was that insufferable imp who brought it here.",
 			SPAWN_DISABLED = "Let it stay banished.",
         },
@@ -4517,6 +4561,13 @@ return{
 
         SCANDATA = "Well... fine. I suppose that sums it all up, more or less.",
 
+		-- QOL 2022
+		JUSTEGGS = "We couldn't even spare a little salt?",
+		VEGGIEOMLET = "At least it's hot.",
+		TALLEGGS = "It's been a while since I've had a good Scotch egg.",
+		BEEFALOFEED = "I suppose I'd better keep the stupid beast fed.",
+		BEEFALOTREAT = "Best to keep the beast placated for now.",
+
         -- Pirates
         BOAT_ROTATOR = "If I hear one word of complaint, I'm turning this boat around.",
         BOAT_ROTATOR_KIT = "Do I look like a common shipwright? Oh, very well...",
@@ -4591,10 +4642,52 @@ return{
         PIRATE_STASH = "Hooray.",
         STASH_MAP = "Now I suppose I'll have to go out and fetch what was stolen from me.",
 
-
         BANANAJUICE = "It doesn't do much for my refined palate.",
 
         FENCE_ROTATOR = "What insidious magic. It draws power from eye rolls and groans.",
+
+        CHARLIE_STAGE_POST = "Just like the old days.",
+        CHARLIE_LECTURN = "Misdirection, the oldest trick in the book. Well played, Charlie.",
+
+        CHARLIE_HECKLER = "Tough crowd.",
+
+        PLAYBILL_THE_DOLL = "I think she's enjoying this a bit too much.",
+        STATUEHARP_HEDGESPAWNER = "This place is really going to seed.",
+        HEDGEHOUND = "The critics here will really eat you alive.",
+        HEDGEHOUND_BUSH = "Nice try.",
+
+        MASK_DOLLHAT = "How very dramatic.",
+        MASK_DOLLBROKENHAT = "How very dramatic.",
+        MASK_DOLLREPAIREDHAT = "How very dramatic.",
+        MASK_BLACKSMITHHAT = "How very dramatic.",
+        MASK_MIRRORHAT = "How very dramatic.",
+        MASK_QUEENHAT = "How very dramatic.",
+        MASK_KINGHAT = "How very dramatic.",
+        MASK_TREEHAT = "How very dramatic.",
+        MASK_FOOLHAT = "How very dramatic.",
+
+        COSTUME_DOLL_BODY = "It seems the costumes are provided.",
+        COSTUME_QUEEN_BODY = "It seems the costumes are provided.",
+        COSTUME_KING_BODY = "I think that one will fit me nicely.",
+        COSTUME_BLACKSMITH_BODY = "It seems the costumes are provided.",
+        COSTUME_MIRROR_BODY = "It seems the costumes are provided.",
+        COSTUME_TREE_BODY = "It seems the costumes are provided.",
+        COSTUME_FOOL_BODY = "It seems the costumes are provided.",
+
+        STAGEUSHER =
+        {
+            STANDING = "Hmph. Impressive sleight of hand.",
+            SITTING = "This must be the work of an unseen hand.",
+        },
+        SEWING_MANNEQUIN =
+        {
+            GENERIC = "Finally, someone who'll carry my things.",
+            BURNT = "Someone should clean that up.",
+        },
+
+		-- Waxwell
+		MAGICIAN_CHEST = "If you're worried about getting stuck inside, don't rummage through my things.",
+		TOPHAT_MAGICIAN = "Tall, dark and dapper.",
     },
 
     DESCRIBE_GENERIC = "You tell me.",

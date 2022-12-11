@@ -97,7 +97,7 @@ end
 local function OnEntityDeath(inst, data)
     if data.inst ~= nil then
         data.inst._soulsource = data.afflicter -- Mark the victim.
-        if (data.inst.components.lootdropper == nil or data.explosive) then -- NOTES(JBK): Explosive entities do not drop loot.
+        if (data.inst.components.lootdropper == nil or data.inst.components.lootdropper.forcewortoxsouls or data.explosive) then -- NOTES(JBK): Explosive entities do not drop loot.
             OnEntityDropLoot(inst, data)
         end
     end
@@ -449,6 +449,9 @@ end
 --------------------------------------------------------------------------
 
 local function CLIENT_Wortox_HostileTest(inst, target)
+	if target.HostileToPlayerTest ~= nil then
+		return target:HostileToPlayerTest(inst)
+	end
     return (target:HasTag("hostile") or target:HasTag("pig") or target:HasTag("catcoon"))
 end
 

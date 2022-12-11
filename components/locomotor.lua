@@ -153,7 +153,10 @@ local function ServerGetSpeedMultiplier(self)
             if saddle ~= nil and saddle.components.saddler ~= nil then
                 mult = mult * saddle.components.saddler:GetBonusSpeedMult()
             end
-        else
+        elseif self.inst.components.inventory.isopen then
+            --NOTE: Check if inventory is open because client GetEquips returns
+            --      nothing if inventory is closed.
+            --      Don't check visibility though.
 			local is_mighty = self.inst.components.mightiness ~= nil and self.inst.components.mightiness:GetState() == "mighty"
             for k, v in pairs(self.inst.components.inventory.equipslots) do
                 if v.components.equippable ~= nil then
@@ -182,6 +185,7 @@ local function ClientGetSpeedMultiplier(self)
                 mult = mult * inventoryitem:GetWalkSpeedMult()
             end
         else
+            --NOTE: GetEquips returns empty if inventory is closed! (Hidden still returns items.)
 			local is_mighty = self.inst:HasTag("mightiness_mighty")
             for k, v in pairs(inventory:GetEquips()) do
                 local inventoryitem = v.replica.inventoryitem
@@ -493,7 +497,7 @@ function LocoMotor:UpdateGroundSpeedMultiplier()
 
         local current_ground_tile = TheWorld.Map:GetTileAtPoint(x, 0, z)
         self.groundspeedmultiplier = (self:IsFasterOnGroundTile(current_ground_tile) or 
-                                     (self:FasterOnRoad() and ((RoadManager ~= nil and RoadManager:IsOnRoad(x, 0, z)) or current_ground_tile == WORLD_TILES.ROAD)) or
+                                     (self:FasterOnRoad() and ((RoadManager ~= nil and RoadManager:IsOnRoad(x, 0, z)) or GROUND_ROADWAYS[current_ground_tile])) or
                                      (self:FasterOnCreep() and oncreep))
 									 and self.fastmultiplier 
 									 or 1
@@ -581,6 +585,10 @@ function LocoMotor:PreviewAction(bufferedaction, run, try_instant)
         return
     end
 
+    if bufferedaction.action.pre_action_cb ~= nil then
+        bufferedaction.action.pre_action_cb(bufferedaction)
+    end
+
     self.throttle = 1
     self:Clear()
     local action_pos = bufferedaction:GetActionPoint()
@@ -595,23 +603,27 @@ function LocoMotor:PreviewAction(bufferedaction, run, try_instant)
         self.inst.sg ~= nil and
         self.inst.components.playercontroller ~= nil and
         not self.inst.components.playercontroller.directwalking then
-        self:Stop()
-        if bufferedaction.target ~= nil then
-            self.inst:FacePoint(bufferedaction.target.Transform:GetWorldPosition())
-        end
-        if not self.inst.sg:HasStateTag("idle") then
-            local idle_anim = self.inst:HasTag("playerghost") and "idle" or "idle_loop"
-            if not self.inst.AnimState:IsCurrentAnimation(idle_anim) then
-                self.inst.AnimState:PlayAnimation(idle_anim, true)
-            end
-        end
-        self.inst:PreviewBufferedAction(bufferedaction)
-        self.inst.sg:GoToState("idle", "noanim")
+		if self.inst.sg:HasStateTag("overridelocomote") then
+			self.inst:PreviewBufferedAction(bufferedaction)
+		else
+			self:Stop()
+			if bufferedaction.target ~= nil then
+				self.inst:FacePoint(bufferedaction.target.Transform:GetWorldPosition())
+			end
+			if not self.inst.sg:HasStateTag("idle") then
+				local idle_anim = self.inst:HasTag("playerghost") and "idle" or "idle_loop"
+				if not self.inst.AnimState:IsCurrentAnimation(idle_anim) then
+					self.inst.AnimState:PlayAnimation(idle_anim, true)
+				end
+			end
+			self.inst:PreviewBufferedAction(bufferedaction)
+			self.inst.sg:GoToState("idle", "noanim")
+		end
     elseif bufferedaction.forced then
         if action_pos ~= nil then
             self:GoToPoint(nil, bufferedaction, run)
         end
-    elseif bufferedaction.action.instant or bufferedaction.action.do_not_locomote then
+	elseif bufferedaction.action.instant or bufferedaction.action.do_not_locomote or bufferedaction.options.instant then
         self.inst:PreviewBufferedAction(bufferedaction)
     elseif bufferedaction.target ~= nil then
         if bufferedaction.distance ~= nil and bufferedaction.distance >= math.huge then
@@ -645,6 +657,10 @@ end
 function LocoMotor:PushAction(bufferedaction, run, try_instant)
     if bufferedaction == nil then
         return
+    end
+
+    if bufferedaction.action.pre_action_cb ~= nil then
+        bufferedaction.action.pre_action_cb(bufferedaction)
     end
 
     self.throttle = 1
@@ -681,7 +697,7 @@ function LocoMotor:PushAction(bufferedaction, run, try_instant)
         if action_pos ~= nil then
             self:GoToPoint(nil, bufferedaction, run, bufferedaction.overridedest)
         end
-    elseif bufferedaction.action.instant or bufferedaction.action.do_not_locomote then
+	elseif bufferedaction.action.instant or bufferedaction.action.do_not_locomote or bufferedaction.options.instant then
         self.inst:PushBufferedAction(bufferedaction)
     elseif bufferedaction.target ~= nil then
         if bufferedaction.distance ~= nil and bufferedaction.distance >= math.huge then

@@ -196,6 +196,17 @@ pitchfork_clear_fn = function(inst)
     basic_clear_fn(inst, "pitchfork" )
 end
 
+goldenpitchfork_init_fn = function(inst, build_name)
+    if string.find( build_name, "_invisible") ~= nil then
+        inst.components.floater.do_bank_swap = false
+    end
+    basic_init_fn( inst, build_name, "goldenpitchfork" )
+end
+goldenpitchfork_clear_fn = function(inst)
+    inst.components.floater.do_bank_swap = true
+    basic_clear_fn(inst, "goldenpitchfork" )
+end
+
 goldenpickaxe_init_fn = function(inst, build_name)
     if string.find( build_name, "_invisible") ~= nil then
         inst.components.floater.do_bank_swap = false
@@ -238,8 +249,18 @@ oceanfishingrod_clear_fn = function(inst) basic_clear_fn(inst, "fishingrod_ocean
 amulet_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "amulets" ) end
 amulet_clear_fn = function(inst) basic_clear_fn(inst, "amulets" ) end
 
-yellowamulet_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "amulets" ) end
-yellowamulet_clear_fn = function(inst) basic_clear_fn(inst, "amulets" ) end
+yellowamulet_init_fn = function(inst, build_name)
+    basic_init_fn( inst, build_name, "amulets" )
+
+    if not TheWorld.ismastersim then
+        return
+    end
+    inst.skin_equip_sound = SKIN_SOUND_FX[inst:GetSkinName()]
+end
+yellowamulet_clear_fn = function(inst)
+    basic_clear_fn( inst, "amulets" )
+    inst.skin_equip_sound = nil
+end
 
 book_brimstone_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "books" ) end
 book_brimstone_clear_fn = function(inst) basic_clear_fn(inst, "books" ) end
@@ -271,6 +292,9 @@ armor_sanity_clear_fn = function(inst) basic_clear_fn(inst, "armor_sanity" ) end
 armorskeleton_init_fn =  function(inst, build_name) basic_init_fn( inst, build_name, "armor_skeleton" ) end
 armorskeleton_clear_fn = function(inst) basic_clear_fn(inst, "armor_skeleton" ) end
 
+beargervest_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "torso_bearger" ) end
+beargervest_clear_fn = function(inst) basic_clear_fn(inst, "torso_bearger" ) end
+
 reflectivevest_init_fn =  function(inst, build_name) basic_init_fn( inst, build_name, "torso_reflective" ) end
 reflectivevest_clear_fn = function(inst) basic_clear_fn(inst, "torso_reflective" ) end
 
@@ -292,8 +316,19 @@ flowerhat_clear_fn = function(inst) basic_clear_fn(inst, "hat_flower" ) end
 strawhat_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "hat_straw" ) end
 strawhat_clear_fn = function(inst) basic_clear_fn(inst, "hat_straw" ) end
 
-walrushat_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "hat_walrus" ) end
-walrushat_clear_fn = function(inst) basic_clear_fn(inst, "hat_walrus" ) end
+walrushat_init_fn = function(inst, build_name)
+    basic_init_fn( inst, build_name, "hat_walrus" )
+
+    if not TheWorld.ismastersim then
+        return
+    end
+    inst.skin_equip_sound = SKIN_SOUND_FX[inst:GetSkinName()]
+end
+walrushat_clear_fn = function(inst)
+    basic_clear_fn(inst, "hat_walrus" )
+    
+    inst.skin_equip_sound = nil
+end
 
 winterhat_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "hat_winter" ) end
 winterhat_clear_fn = function(inst) basic_clear_fn(inst, "hat_winter" ) end
@@ -367,8 +402,27 @@ lightning_rod_clear_fn = function(inst) basic_clear_fn(inst, "lightning_rod" ) e
 arrowsign_post_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "sign_arrow_post" ) end
 arrowsign_post_clear_fn = function(inst) basic_clear_fn(inst, "sign_arrow_post" ) end
 
-treasurechest_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "treasure_chest" ) end
-treasurechest_clear_fn = function(inst) basic_clear_fn(inst, "treasure_chest" ) end
+treasurechest_init_fn = function(inst, build_name)
+    basic_init_fn( inst, build_name, "treasure_chest" )
+
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    local sounds = SKIN_SOUND_FX[inst:GetSkinName()]
+    if sounds ~= nil then
+        inst.skin_place_sound = SKIN_SOUND_FX[inst:GetSkinName()][1]
+        inst.skin_open_sound = SKIN_SOUND_FX[inst:GetSkinName()][2]
+        inst.skin_close_sound = SKIN_SOUND_FX[inst:GetSkinName()][3]
+    end
+end
+treasurechest_clear_fn = function(inst)
+    basic_clear_fn(inst, "treasure_chest" )
+
+    inst.skin_place_sound = nil
+    inst.skin_open_sound = nil
+    inst.skin_close_sound = nil
+end
 
 dragonflychest_init_fn = function(inst, build_name) basic_init_fn( inst, build_name, "dragonfly_chest" ) end
 dragonflychest_clear_fn = function(inst) basic_clear_fn(inst, "dragonfly_chest" ) end
@@ -494,10 +548,14 @@ end
 stagehand_init_fn = function(inst, build_name)
     basic_init_fn( inst, build_name, "stagehand" )
     inst.AnimState:OverrideSymbol("stagehand_fingers", "stagehand", "stagehand_fingers")
+    inst.AnimState:OverrideSymbol("fx", "stagehand", "fx")
+    inst.AnimState:OverrideSymbol("dark_spew", "stagehand", "dark_spew")
 end
 stagehand_clear_fn = function(inst)
     basic_clear_fn(inst, "stagehand" )
     inst.AnimState:ClearOverrideSymbol("stagehand_fingers")
+    inst.AnimState:ClearOverrideSymbol("fx")
+    inst.AnimState:ClearOverrideSymbol("dark_spew")
 end
 
 
@@ -691,15 +749,20 @@ wathgrithrhat_init_fn = function(inst, build_name, opentop)
         inst:AddTag("open_top_hat")
         inst.components.equippable:SetOnEquip(inst._opentop_onequip)
     end
+    
+    if not TheWorld.ismastersim then
+        return
+    end
+    inst.skin_equip_sound = SKIN_SOUND_FX[inst:GetSkinName()]
 end
 wathgrithrhat_clear_fn = function(inst)
     basic_clear_fn(inst, "hat_wathgrithr" )
 
     inst:RemoveTag("open_top_hat")
     inst.components.equippable:SetOnEquip(inst._onequip)
+
+    inst.skin_equip_sound = nil
 end
-
-
 
 
 --------------------------------------------------------------------------
@@ -843,19 +906,34 @@ glommer_clear_fn = function(inst) basic_clear_fn(inst, "glommer" ) end
 function bundlewrap_init_fn(inst, build_name)
     basic_init_fn( inst, build_name, "bundle" )
     inst.components.bundlemaker:SetSkinData( build_name, inst.skin_id )
+    
+    if not TheWorld.ismastersim then
+        return
+    end
+    if SKIN_SOUND_FX[inst:GetSkinName()] ~= nil then
+        inst.skin_open_sound = SKIN_SOUND_FX[inst:GetSkinName()][1]
+        inst.skin_wrap_sound = SKIN_SOUND_FX[inst:GetSkinName()][2]
+    end
 end
 function bundlewrap_clear_fn(inst)
     basic_clear_fn(inst, "bundle" )
     inst.components.bundlemaker:SetSkinData()
+ 
+    inst.skin_open_sound = nil
+    inst.skin_wrap_sound = nil
 end
 
 function bundle_init_fn(inst, build_name)
     basic_init_fn( inst, build_name, "bundle" )
     inst:UpdateInventoryImage()
+
+    inst.skin_wrap_sound = SKIN_SOUND_FX[inst:GetSkinName()]
 end
 function bundle_clear_fn(inst)
     basic_clear_fn(inst, "bundle" )
     inst:UpdateInventoryImage()
+
+    inst.skin_wrap_sound = nil
 end
 
 
@@ -1931,6 +2009,7 @@ local function lantern_off(inst)
             fx._lastpos = fx._lastpos or fx:GetPosition()
             fx.entity:SetParent(nil)
             if fx.Follower ~= nil then
+            	print("THIS ONE")
                 fx.Follower:StopFollowing()
             end
             fx.Transform:SetPosition(fx._lastpos:Get())

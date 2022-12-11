@@ -64,6 +64,7 @@ return{
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDERS = "It'd be more fun with more kitcoons.",
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDING_SPOTS = "This place doesn't have a ton of hiding spots...",
 			KITCOON_HIDEANDSEEK_ONE_GAME_PER_DAY = "They look tired. Let's play again tomorrow!",
+            MANNEQUIN_EQUIPSWAPFAILED = "Nah, it looks better on me.",
 		},
 		OPEN_CRAFTING =
 		{
@@ -110,6 +111,7 @@ return{
 --fallback to speech_wilson.lua             NOSLEEPTARGETS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua             TOOMANYBEES = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua             NOMOONINCAVES = "only_used_by_waxwell_and_wicker",
+--fallback to speech_wilson.lua             ALREADYFULLMOON = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua         },
 
         GIVE =
@@ -382,6 +384,16 @@ return{
         {
             DOER_ISNT_MODULE_OWNER = "Ha! Scan THAT!",
         },
+
+		CAST_SPELLBOOK =
+		{
+--fallback to speech_wilson.lua			NO_TOPHAT = "only_used_by_waxwell",
+		},
+
+		CASTAOE =
+		{
+--fallback to speech_wilson.lua			NO_MAX_SANITY = "only_used_by_waxwell",
+		},
     },
 
 	ANNOUNCE_CANNOT_BUILD =
@@ -403,6 +415,13 @@ return{
 --fallback to speech_wilson.lua     ANNOUNCE_TOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua     ANNOUNCE_WAYTOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua     ANNOUNCE_NOWATERNEARBY = "only_used_by_waxwell_and_wicker",
+
+	--waxwell specific
+--fallback to speech_wilson.lua		ANNOUNCE_SHADOWLEVEL_ITEM = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T1 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T2 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T3 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T4 = "only_used_by_waxwell",
 
     --wolfgang specific
 --fallback to speech_wilson.lua     ANNOUNCE_NORMALTOMIGHTY = "only_used_by_wolfang",
@@ -466,6 +485,8 @@ return{
 --fallback to speech_wilson.lua         SAME_OLD_5 = "only_used_by_warly",
 --fallback to speech_wilson.lua 		TASTY = "only_used_by_warly",
     },
+
+	ANNOUNCE_FOODMEMORY = "only_used_by_warly",
 
     ANNOUNCE_ENCUMBERED =
     {
@@ -860,6 +881,8 @@ return{
     ANNOUNCE_PIRATES_ARRIVE = "Uh, that sound's getting closer...",
 
 --fallback to speech_wilson.lua     ANNOUNCE_BOOK_MOON_DAYTIME = "only_used_by_waxwell_and_wicker",
+
+    ANNOUNCE_OFF_SCRIPT = "Haha, you messed up!",
 
 	BATTLECRY =
 	{
@@ -1451,7 +1474,19 @@ return{
 
         TURF_SHELLBEACH = "The ground is boring.",
 
+		TURF_RUINSBRICK = "The ground is boring.",
+		TURF_RUINSBRICK_GLOW = "The ground is boring.",
+		TURF_RUINSTILES = "The ground is boring.",
+		TURF_RUINSTILES_GLOW = "The ground is boring.",
+		TURF_RUINSTRIM = "The ground is boring.",
+		TURF_RUINSTRIM_GLOW = "The ground is boring.",
+
         TURF_MONKEY_GROUND = "The ground is boring.",
+
+        TURF_CARPETFLOOR2 = "The ground is boring.",
+        TURF_MOSAIC_GREY = "The ground is boring.",
+        TURF_MOSAIC_RED = "The ground is boring.",
+        TURF_MOSAIC_BLUE = "The ground is boring.",
 
 		POWCAKE = "I wonder if it is flammable.",
         CAVE_ENTRANCE = "Who plugged that hole?",
@@ -1635,6 +1670,10 @@ return{
             RARE = "Woah. It doesn't burn!!",
         },
         SKETCH = "Trading diagrams is for dorks.",
+		COOKINGRECIPECARD = 
+		{
+			GENERIC = "Can't read it, into the fire it goes!",
+		},
 		BLUE_CAP = "It smells like a gym sock!",
 		BLUE_CAP_COOKED = "Transformed by fire!",
 		BLUE_MUSHROOM =
@@ -1659,6 +1698,7 @@ return{
 		BUZZARD = "Your neck is gross.",
 
 		SHADOWDIGGER = "Eww, it's even creepier than the real one.",
+        SHADOWDANCER = "Yep, that's pure nightmare fuel.",
 
 		CACTUS =
 		{
@@ -1820,6 +1860,7 @@ return{
 		},
         GOGGLESHAT = "What a great look!",
         DESERTHAT = "Not very stylish.",
+        ANTLIONHAT = "Pfft, what a dumb-looking hat. I love it.",
 --fallback to speech_wilson.lua 		DEVTOOL = "It smells of bacon!",
 --fallback to speech_wilson.lua 		DEVTOOL_NODEV = "I'm not strong enough to wield it.",
 		DIRTPILE = "Who just leaves dirt lying around in the forest?",
@@ -2902,7 +2943,11 @@ return{
 		WATERMELON = "But where's the firemelon?",
 		WATERMELON_COOKED = "I made my own firemelon.",
 		WATERMELONHAT = "Well, that's one use for this fruit.",
-		WAXWELLJOURNAL = "Would make a great bedtime story... for nightmares!",
+		WAXWELLJOURNAL =
+		{
+			GENERIC = "Would make a great bedtime story... for nightmares!",
+--fallback to speech_wilson.lua			NEEDSFUEL = "only_used_by_waxwell",
+		},
 		WETGOOP = "How did it go wrong?! It was engulfed in fire and everything.",
         WHIP = "This means I'm the boss now.",
 		WINTERHAT = "It's not warm enough for my liking.",
@@ -4523,6 +4568,13 @@ return{
 
         SCANDATA = "Looks like dumb science stuff for nerds.",
 
+		-- QOL 2022
+		JUSTEGGS = "Eggs and more eggs.",
+		VEGGIEOMLET = "Hey, there's vegetables hiding underneath!",
+		TALLEGGS = "It still has that birdy crunch to it.",
+		BEEFALOFEED = "Alright smelly, eat up!",
+		BEEFALOTREAT = "Beefalo are pretty easy to please.",
+
         -- Pirates
         BOAT_ROTATOR = "Hehehe, let's see how fast we can spin without getting sick!",
         BOAT_ROTATOR_KIT = "Fiiiine, I'll put the stupid rudder on the stupid boat.",
@@ -4597,10 +4649,52 @@ return{
         PIRATE_STASH = "Treasure! Heh, I'm pretty good at this.",
         STASH_MAP = "Ha! Those dumb monkeys left a map to their treasure!",
 
-
         BANANAJUICE = "Blech, it's cold!",
 
         FENCE_ROTATOR = "I'm gonna go fight a fence!",
+
+        CHARLIE_STAGE_POST = "Setting stuff on fire is so much easier and more entertaining.",
+        CHARLIE_LECTURN = "Who's gonna get roped into playing the characters?",
+
+        CHARLIE_HECKLER = "Heh. I kinda like them.",
+
+        PLAYBILL_THE_DOLL = "What a weird story.",
+        STATUEHARP_HEDGESPAWNER = "That poor statue's covered in flammable vines! Whatever should I do?",
+        HEDGEHOUND = "Ugh, you sneaky jerk!!",
+        HEDGEHOUND_BUSH = "Those roses will look so pretty as they're burning.",
+
+        MASK_DOLLHAT = "What a creepy mask.",
+        MASK_DOLLBROKENHAT = "What a creepy mask.",
+        MASK_DOLLREPAIREDHAT = "Uuuugh, it got even creepier.",
+        MASK_BLACKSMITHHAT = "What a creepy mask.",
+        MASK_MIRRORHAT = "What a creepy mask.",
+        MASK_QUEENHAT = "What a creepy mask.",
+        MASK_KINGHAT = "What a creepy mask.",
+        MASK_TREEHAT = "What a creepy mask.",
+        MASK_FOOLHAT = "What a creepy mask.",
+
+        COSTUME_DOLL_BODY = "They can't ban you from the theater if you're part of the cast!",
+        COSTUME_QUEEN_BODY = "They can't ban you from the theater if you're part of the cast!",
+        COSTUME_KING_BODY = "They can't ban you from the theater if you're part of the cast!",
+        COSTUME_BLACKSMITH_BODY = "They can't ban you from the theater if you're part of the cast!",
+        COSTUME_MIRROR_BODY = "They can't ban you from the theater if you're part of the cast!",
+        COSTUME_TREE_BODY = "They can't ban you from the theater if you're part of the cast!",
+        COSTUME_FOOL_BODY = "They can't ban you from the theater if you're part of the cast!",
+
+        STAGEUSHER =
+        {
+            STANDING = "Gross! I told you we shoulda burned it!",
+            SITTING = "What's a weird table doing out here? Let's burn it!",
+        },
+        SEWING_MANNEQUIN =
+        {
+            GENERIC = "Here, hold my stuff, would you?",
+            BURNT = "I think it looks better, personally.",
+        },
+
+		-- Waxwell
+		MAGICIAN_CHEST = "What do you think would happen if I threw a lit match inside?",
+		TOPHAT_MAGICIAN = "Aww, I thought I saw smoke, but it's just Max's shadow gunk.",
     },
 
     DESCRIBE_GENERIC = "I have no idea what that is!",

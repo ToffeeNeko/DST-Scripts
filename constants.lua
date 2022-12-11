@@ -3,8 +3,9 @@ local TechTree = require("techtree")
 
 local IS_BETA = BRANCH == "staging" --or BRANCH == "dev"
 
-PI = 3.14159
+PI = math.pi
 PI2 = PI*2
+TWOPI = PI2
 DEGREES = PI/180
 RADIANS = 180/PI
 FRAMES = 1/30
@@ -388,7 +389,7 @@ CHARACTER_VIDEOS =
 	wx78 = {"https://klei.gg/3F9qqc1"},
 	wickerbottom = {"https://klei.gg/3bCaOTL"},
 	wes = {"https://bit.ly/2QLFpn4"},
-	waxwell = {"https://bit.ly/3rF0UD0"},
+	waxwell = {"https://klei.gg/3AHfLEb"},
 	woodie = {"https://bit.ly/3sHhUK1"},
 	wathgrithr = {"https://bit.ly/3rC8YV6"},
 	webber = {"https://klei.gg/3zXJrLt"},
@@ -401,9 +402,9 @@ CHARACTER_VIDEOS =
 	wanda = {"https://klei.gg/dst-wanda-short"},
 }
 
-PLAYER_SWAP_TRANSITIONS = 
+PLAYER_SWAP_TRANSITIONS =
 {
-	wonkey = 
+	wonkey =
 	{
 		transfrom_state = "changetomonkey_pst",
 		restore_state = "changefrommonkey_pst",
@@ -674,6 +675,7 @@ GROUND_NAMES = {}
 TERRAFORM_IMMUNE = {}
 GROUND_FLOORING = {} --These tiles are flooring (stuff shouldn't grow on them)
 GROUND_HARD = {} --not plantable
+GROUND_ROADWAYS = {} -- Player speed boosting enabled.
 
 FALLOFF_IDS = {
     FALLOFF = 1,
@@ -749,8 +751,8 @@ SPECIAL_EVENTS =
     YOTB = "year_of_the_beefalo",
     YOT_CATCOON = "year_of_the_catcoon",
 }
-WORLD_SPECIAL_EVENT = SPECIAL_EVENTS.NONE
---WORLD_SPECIAL_EVENT = IS_BETA and SPECIAL_EVENTS.YOT_CATCOON or SPECIAL_EVENTS.NONE
+WORLD_SPECIAL_EVENT = SPECIAL_EVENTS.WINTERS_FEAST
+--WORLD_SPECIAL_EVENT = IS_BETA and SPECIAL_EVENTS.NONE or SPECIAL_EVENTS.HALLOWED_NIGHTS
 WORLD_EXTRA_EVENTS = {}
 
 FESTIVAL_EVENTS =
@@ -800,10 +802,8 @@ SPECIAL_EVENT_MUSIC =
     --winter's feast carol
     [SPECIAL_EVENTS.WINTERS_FEAST] =
     {
-  --      bank = "music_frontend_winters_feast.fsb",
-  --      sound = "dontstarve/music/music_FE_WF",
-        bank = "music_frontend.fsb",
-        sound = "dontstarve/music/music_FE_wolfgang",
+        bank = "music_frontend_winters_feast.fsb",
+        sound = "dontstarve/music/music_FE_WF",
     },
 
     --year of the gobbler
@@ -1035,7 +1035,9 @@ end
 FE_MUSIC =
     (FESTIVAL_EVENT_MUSIC[WORLD_FESTIVAL_EVENT] ~= nil and FESTIVAL_EVENT_MUSIC[WORLD_FESTIVAL_EVENT].sound) or
     (SPECIAL_EVENT_MUSIC[WORLD_SPECIAL_EVENT] ~= nil and SPECIAL_EVENT_MUSIC[WORLD_SPECIAL_EVENT].sound) or
-    "dontstarve/music/music_FE_wickerbottom"
+    "dontstarve/music/music_FE_maxwell"
+    --"dontstarve/music/music_FE_charliestage"
+    --"dontstarve/music/music_FE_wickerbottom"
     --"dontstarve/music/music_FE"
     --"dontstarve/music/music_FE_pirates"
     --"dontstarve/music/music_FE_WX"
@@ -1439,7 +1441,7 @@ ROAD_PARAMETERS =
 	WIDTH_JITTER_SCALE=1,
 }
 
-local function RGB(r, g, b)
+function RGB(r, g, b)
     return { r / 255, g / 255, b / 255, 1 }
 end
 
@@ -1732,6 +1734,7 @@ MATERIALS =
     MOON_ALTAR = "moon_altar",
     KELP = "kelp",
     SHELL = "shell",
+    NIGHTMARE = "nightmare",
 }
 
 UPGRADETYPES =
@@ -2158,6 +2161,9 @@ INTENTIONS =
     MADNESS = "madness",
     ANY = "any", -- for player use only, servers must have an intention
 }
+
+PLAYSTYLE_ANY = "ANY"
+PLAYSTYLE_DEFAULT = "survival"
 
 LEVELTYPE = {
     SURVIVAL = "SURVIVAL",

@@ -5,7 +5,7 @@ TUNING_MODIFIERS = {}
 ORIGINAL_TUNING = {}
 
 function AddTuningModifier(tuning_var, fn, tuning_value)
-    if not TUNING_MODIFIERS[tuning_var] then
+    if not TUNING_MODIFIERS[tuning_var] and fn then
         TUNING_MODIFIERS[tuning_var] = {fn, TUNING[tuning_var] or tuning_value}
         TUNING[tuning_var] = nil
     end
@@ -54,6 +54,9 @@ function Tune(overrides)
         MAX_SERVER_SIZE = 6,
         DEMO_TIME = total_day_time * 2 + day_time*.2,
         AUTOSAVE_INTERVAL = total_day_time,
+
+		HUD_CLOUD_CUTOFF = 0.75,
+
         SEG_TIME = seg_time,
         TOTAL_DAY_TIME = total_day_time,
         DAY_SEGS_DEFAULT = day_segs,
@@ -111,8 +114,12 @@ function Tune(overrides)
         WILSON_HUNGER_RATE = calories_per_day/total_day_time, --calories burnt per day
         WILSON_SANITY = wilson_sanity,
 
+		PLAYER_DAMAGE_TAKEN_MOD = 1,
+
         -- Controller specific tuning values.
         CONTROLLER_DEADZONE_RADIUS = 0.3, -- TODO(JBK): Hook this up.
+		CONTROLLER_RETICULE_INITIAL_DEADZONE_RADIUS = .5,
+		CONTROLLER_RETICULE_RSTICK_SPEED = 2,
         CONTROLLER_BLINKFOCUS_DISTANCESQ_MIN = 4,
         CONTROLLER_BLINKFOCUS_DISTANCE = 8,
         CONTROLLER_BLINKFOCUS_ANGLE = 30, -- Angle is for both sides of the facing direction so cone total size is double this value.
@@ -169,6 +176,7 @@ function Tune(overrides)
 
         REDAMULET_USES = 20,
         REDAMULET_CONVERSION = 5,
+        REDAMULET_CONVERSION_TIME = 30,
 
         BLUEAMULET_FUEL = total_day_time * 0.75,
         BLUEGEM_COOLER = -20,
@@ -562,6 +570,7 @@ function Tune(overrides)
         MINOTAUR_WALK_SPEED = 5,
         MINOTAUR_RUN_SPEED = 17,
         MINOTAUR_TARGET_DIST = 25,
+		MINOTAUR_LEAP_CD = 10,
 
         SLURTLE_DAMAGE = 25,
         SLURTLE_HEALTH = 600 * 2, -- harder for multiplayer
@@ -712,6 +721,8 @@ function Tune(overrides)
         GHOST_GRAVESTONE_CHANCE = 0.05,
         GHOST_FOLLOW_DSQ = 30 * 30, -- Used in ghost.lua and ghostbrain.lua
         GHOST_SISTURN_CHANCE_PER_DECOR = 0.05,
+
+        COOKINGRECIPECARD_GRAVESTONE_CHANCE = 0.1,
 
         MIN_LEAF_CHANGE_TIME = .1 * day_time,
         MAX_LEAF_CHANGE_TIME = 3 * day_time,
@@ -1147,6 +1158,8 @@ function Tune(overrides)
         TEENBIRD_STARVE_KILL_TIME = 240,
         TEENBIRD_GROW_TIME = total_day_time*18,
         TEENBIRD_TARGET_DIST = 8,
+		TALLBIRD_LAY_EGG_TIME_MIN = 3 * total_day_time,
+		TALLBIRD_LAY_EGG_TIME_VAR = 2 * total_day_time,
 
         SMALLBIRD_HEALTH = 50,
         SMALLBIRD_DAMAGE = 10,
@@ -1380,6 +1393,10 @@ function Tune(overrides)
         MUTATEDHOUND_HEALTH = 100,
         MUTATEDHOUND_DAMAGE = 25,
         MUTATEDHOUND_ATTACK_PERIOD = 2.5,
+
+        HEDGEHOUND_HEALTH = 50,
+        HEDGEHOUND_DAMAGE = 10,
+        HEDGEHOUND_ATTACK_PERIOD = 2,
 
         MOONPIG_AGGRO_DIST = 15,
         MOONPIG_RETURN_DIST = 30,
@@ -1816,6 +1833,7 @@ function Tune(overrides)
         HEALING_MEDLARGE = 30,
         HEALING_LARGE = 40,
         HEALING_HUGE = 60,
+        HEALING_MOREHUGE = 75,
         HEALING_SUPERHUGE = 100,
 
         SANITY_SUPERTINY = 1,
@@ -1850,6 +1868,7 @@ function Tune(overrides)
         CALORIES_MED = calories_per_day/3,			-- meat					 25
         CALORIES_LARGE = calories_per_day/2,		-- cooked meat			 37.5
         CALORIES_HUGE = calories_per_day,			-- crockpot foods?		 75
+        CALORIES_MOREHUGE = calories_per_day*4/3,	-- crockpot foods?		100
         CALORIES_SUPERHUGE = calories_per_day*2,	-- crockpot foods?		150
 
 		-- food affinity multipliers to add 15 calories
@@ -1887,6 +1906,7 @@ function Tune(overrides)
         TALLBIRDEGG_HUNGER = 15,
         TALLBIRDEGG_COOKED_HEALTH = 25;
         TALLBIRDEGG_COOKED_HUNGER = 30,
+		TALLBIRD_MAKE_NEST_RADIUS = 2,
 
         REPAIR_CUTSTONE_HEALTH = 50,
         REPAIR_ROCKS_HEALTH = 50/3,
@@ -2107,9 +2127,10 @@ function Tune(overrides)
         MIN_SMOLDER_TIME = .5*seg_time,
         MAX_SMOLDER_TIME = seg_time,
 
-        TENT_USES = 6,
-        SIESTA_CANOPY_USES = 6,
+        TENT_USES = 15,
+        SIESTA_CANOPY_USES = 15,
         PORTABLE_TENT_USES = 10,
+		BEDROLL_FURRY_USES = 3,
 
         DAPPER_BEARDLING_SANITY = .3,
         BEARDLING_SANITY = .4,
@@ -2537,6 +2558,7 @@ function Tune(overrides)
         },
         NIGHTMARE_SEG_VARIATION = 3,
 
+        -- DEPRECATED v
         SHADOWWAXWELL_SPEED = 6,
         SHADOWWAXWELL_DAMAGE = 40,
         SHADOWWAXWELL_LIFE = 75,
@@ -2544,14 +2566,94 @@ function Tune(overrides)
         SHADOWWAXWELL_HEALTH_REGEN = 15,
         SHADOWWAXWELL_HEALTH_REGEN_PERIOD = 2,
         SHADOWWAXWELL_TARGET_DIST = 10,
+        -- DEPRECATED ^
 
+		-- Waxwell
         SHADOWWAXWELL_SANITY_PENALTY =
         {
+			-- DEPRECATED v
             SHADOWLUMBER = .2,
             SHADOWMINER = .2,
             SHADOWDIGGER = .2,
             SHADOWDUELIST = .35,
+			-- DEPRECATED ^
+			SHADOWWORKER = .15,
+			SHADOWPROTECTOR = .15,
         },
+		SHADOWWAXWELL_PROTECTOR_DURATION = seg_time * 4,
+        SHADOWWAXWELL_PROTECTOR_SPEED = 6,
+		SHADOWWAXWELL_PROTECTOR_DAMAGE = 20,
+		SHADOWWAXWELL_PROTECTOR_DAMAGE_BONUS_PER_LEVEL = 4,
+        SHADOWWAXWELL_PROTECTOR_LIFE = 75,
+        SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_TAKEN = 15,
+		SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_INCREASE = 5, --raise the cap this amount per tick
+		SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_PERIOD = 2.5, --tick period in seconds
+		SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_INITIAL_PERIOD = 5, --first tick, also used for disengage reset timer
+		SHADOWWAXWELL_PROTECTOR_ATTACK_PERIOD = 1.8,
+		SHADOWWAXWELL_PROTECTOR_ATTACK_PERIOD_INACTIVE_LEADER = 2.8,
+		SHADOWWAXWELL_PROTECTOR_ACTIVE_LEADER_RANGE = 10,
+		SHADOWWAXWELL_PROTECTOR_SHADOW_LEADER_RADIUS = 16,
+        SHADOWWAXWELL_PROTECTOR_DEFEND_RADIUS = 12,
+		SHADOWWAXWELL_PROTECTOR_TRANSFER_AGGRO_RANGE = 24,
+
+		SHADOWWAXWELL_SHADOWSTRIKE_DAMAGE_MULT = 1.5,
+		SHADOWWAXWELL_SHADOWSTRIKE_COOLDOWN = 8,
+		SHADOWWAXWELL_SHADOWSTRIKE_COOLDOWN_INACTIVE_LEADER = 16,
+
+		SHADOWWAXWELL_WORKER_DURATION = seg_time * 8,
+		SHADOWWAXWELL_WORKER_WORK_RADIUS = 12,
+        SHADOWWAXWELL_WORKER_WORK_RADIUS_LOCAL = 4, -- Range around the worker to continue working on things if they are close.
+
+		SHADOWWAXWELL_MINION_IDLE_DESPAWN_TIME = 10,
+
+		SHADOW_TRAP_PANIC_TIME = 12,
+		SHADOW_TRAP_SPEED_MULT = 2 / 3,
+		SHADOW_TRAP_NIGHTMARE_TIME = total_day_time,
+		SHADOW_TRAP_LIFETIME = total_day_time * 3,
+
+		SHADOW_PILLAR_DURATION = 24,
+		SHADOW_PILLAR_DURATION_BOSS = 12,
+		SHADOW_PILLAR_DURATION_PLAYER = 6,
+		SHADOW_PILLAR_BREAK_MULT =
+		{
+			MIN = 1.5,	--break 150% faster => lasts 2/3 duration
+			MAX = 1.5,--2,	--break 200% faster => lasts 1/2 duration
+		},
+
+		WAXWELLJOURNAL_SPELL_COST =
+		{
+			--book pct
+			SHADOW_WORKER = .05,
+			SHADOW_PROTECTOR = .05,
+			SHADOW_TRAP = .05,
+			SHADOW_PILLARS = .05,
+			--SHADOW_TOPHAT = .05,
+		},
+
+		WAXWELL_SHADOW_ITEM_RESISTANCE = 0,
+
+		--Shadow Levels
+		--T1
+		AMULET_SHADOW_LEVEL = 1,
+		STAFF_SHADOW_LEVEL = 1,
+		ONEMANBAND_SHADOW_LEVEL = 1,
+		ANTLIONHAT_SHADOW_LEVEL = 1,
+		NUTRIENTSGOGGLESHAT_SHADOW_LEVEL = 1,
+		--T2
+		MAGICIAN_TOPHAT_SHADOW_LEVEL = 2,
+		BATBAT_SHADOW_LEVEL = 2,
+		ARMORSLURPER_SHADOW_LEVEL = 2,
+		SHIELDOFTERROR_SHADOW_LEVEL = 2,
+		NIGHTSWORD_SHADOW_LEVEL = 2,
+		ARMOR_SANITY_SHADOW_LEVEL = 2,
+		RUINS_BAT_SHADOW_LEVEL = 2,
+		RUINSHAT_SHADOW_LEVEL = 2,
+		ARMORRUINS_SHADOW_LEVEL = 2,
+		--T3
+		SKELETONHAT_SHADOW_LEVEL = 3,
+		ARMOR_SKELETON_SHADOW_LEVEL = 3,
+		--T4
+		THURIBLE_SHADOW_LEVEL = 4,
 
         LIVINGTREE_CHANCE = 0.55,
         LIVINGTREE_YOUNG_WORK = 15,
@@ -2749,7 +2851,9 @@ function Tune(overrides)
         SLEEP_TEMP_PER_TICK = 1,
         SLEEP_WETNESS_PER_TICK = -1,
         SLEEP_TARGET_TEMP_TENT = 40,
+        SLEEP_AMBIENT_TEMP_BEDROLL_FURRY = 40,
         SLEEP_TARGET_TEMP_BEDROLL_FURRY = 30,
+		SLEEP_TARGET_TEMP_BEDROLL_FURRY_MAX = 45,
 
 
         PVP_DAMAGE_MOD = .5,
@@ -2843,6 +2947,8 @@ function Tune(overrides)
         REEDS_REGROWTH_TIME_MULT = 1,
         CACTUS_REGROWTH_TIME = total_day_time * 20,
         CACTUS_REGROWTH_TIME_MULT = 1,
+        CAVE_BANANA_TREE_REGROWTH_TIME = total_day_time * 5,
+        CAVE_BANANA_TREE_REGROWTH_TIME_MULT = 1,
 
         EVERGREEN_REGROWTH = {
             OFFSPRING_TIME = total_day_time * 5,
@@ -5116,8 +5222,9 @@ function Tune(overrides)
             HEALTH = 400 * 3,
             WALK_SPEED = 4,
             ATTACK_PERIOD = 5,
+			ATTACK_RANGE = 3,
             HUSK_HEALTH = 300,
-            AOE_RANGE = 5,
+			AOE_RANGE = 4,
             TARGET_DIST = 12,
         },
 
@@ -5557,7 +5664,8 @@ function Tune(overrides)
         ALTERGUARDIAN_PHASE1_ROLLDAMAGE = 166.67,
         ALTERGUARDIAN_PHASE1_AOEDAMAGE = 66.67,
         ALTERGUARDIAN_PHASE1_ATTACK_PERIOD = 7.5,
-        ALTERGUARDIAN_PHASE1_AOERANGE = 4.25,
+		ALTERGUARDIAN_PHASE1_ROLLRANGE = 2.25,
+		ALTERGUARDIAN_PHASE1_AOERANGE = 4,
         ALTERGUARDIAN_PHASE1_ROLLCOOLDOWN = 8.5,
         ALTERGUARDIAN_PHASE1_MINROLLCOUNT = 3,
         ALTERGUARDIAN_PHASE1_SUMMONCOOLDOWN = 20,
@@ -5790,13 +5898,14 @@ function Tune(overrides)
 
         EYEOFTERROR_CHARGECD = 7,
         EYEOFTERROR_MOUTHCHARGECD = 15,
+		EYEOFTERROR_CHARGE_AOERANGE = 1.75,
         EYEOFTERROR_SPAWNCD = 18,
         EYEOFTERROR_FOCUSCD = 21,
 
         EYEOFTERROR_MINI_EGGTIME = 15,
         EYEOFTERROR_MINI_HEALTH = 200,
         EYEOFTERROR_MINI_DAMAGE = 20,
-        EYEOFTERROR_MINI_ATTACK_RANGE = 4.0,
+        EYEOFTERROR_MINI_ATTACK_RANGE = 3.0,
         EYEOFTERROR_MINI_HIT_RANGE = 2.25,
         EYEOFTERROR_MINI_ATTACK_PERIOD = 3,
 
@@ -6088,6 +6197,7 @@ function Tune(overrides)
         PIRATE_SPAWN_MAX = 1,
       --  PIRATE_SPAWN_DELAY = {min=day_time/2, max=20*day_time}, --{min=30, max=180},
         PIRATE_SPAWN_DELAY = {min=20, max=30}, --{min=30, max=180},
+		PIRATE_STASH_INV_SIZE = 20,
 
         MONKEY_WALK_SPEED_PENALTY = -0.5,
 
@@ -6205,6 +6315,35 @@ function Tune(overrides)
         BOOK_MAX_SHADOWCREATURES = 16,
 
         FENCE_DEFAULT_ROTATION = 45,
+
+        HEALTH_PENALTY_ENABLED = true,
+        NONLETHAL_TEMPERATURE = false,
+        NONLETHAL_HUNGER = false,
+        NONLETHAL_DARKNESS = false,
+        NONLETHAL_PERCENT = 0.2,
+
+        AUTOTERRAFORMER_REPEAT_DELAY = 0.25,
+        ANTLIONHAT_USES = 400,
+        NIGHTMAREFUEL_FINITEUSESREPAIRVALUE = 50,
+        
+        -- Setting the Stage
+        STAGEUSHER_ATTACK_PERIOD = 8,
+        STAGEUSHER_ATTACK_DAMAGE = 80,
+        STAGEUSHER_ATTACK_RANGE = 12,
+        STAGEUSHER_ATTACK_SPEED = 6.0,
+        STAGEUSHER_ATTACK_STEPS = 6,
+        STAGEUSHER_ATTACK_STEPTIME = 25*FRAMES,
+        STAGEUSHER_ATTACK_DAMAGERADIUS = 2.0,
+        STAGEUSHER_GIVEUP_HEALTH = 86*wilson_attack,
+		STAGEUSHER_GIVEUP_TIME = 10,
+
+        CHARLIE_STAGE_RESET_TIME = total_day_time*3,
+        CHARLIE_STAGE_RESET_TIME_VARIABLE = total_day_time*3,
+        CHARLIE_STAGE_MUSIC_RANGE = 15,
+
+        STATUEHARP_HEDGESPAWNER_RESET_TIME = total_day_time,
+
+        SLURPER_MANNEQUINTIME = 7.5,
     }
 
     TUNING_MODIFIERS = {}

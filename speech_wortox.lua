@@ -64,6 +64,7 @@ return{
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDERS = "We'll need more friends if we want to play, hyuyu!",
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDING_SPOTS = "The game was denied, there's nowwhere to hide!",
 			KITCOON_HIDEANDSEEK_ONE_GAME_PER_DAY = "If we play any more, it's gonna be a chore.",
+            MANNEQUIN_EQUIPSWAPFAILED = "Oh what a shame, I thought it would suit you.",
 		},
 		OPEN_CRAFTING =
 		{
@@ -110,6 +111,7 @@ return{
 --fallback to speech_wilson.lua             NOSLEEPTARGETS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua             TOOMANYBEES = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua             NOMOONINCAVES = "only_used_by_waxwell_and_wicker",
+--fallback to speech_wilson.lua             ALREADYFULLMOON = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua         },
 
         GIVE =
@@ -382,6 +384,16 @@ return{
         {
             DOER_ISNT_MODULE_OWNER = "The tin gnat is not keen to chat.",
         },
+
+		CAST_SPELLBOOK =
+		{
+--fallback to speech_wilson.lua			NO_TOPHAT = "only_used_by_waxwell",
+		},
+
+		CASTAOE =
+		{
+--fallback to speech_wilson.lua			NO_MAX_SANITY = "only_used_by_waxwell",
+		},
     },
 
 	ANNOUNCE_CANNOT_BUILD =
@@ -403,6 +415,13 @@ return{
 --fallback to speech_wilson.lua     ANNOUNCE_TOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua     ANNOUNCE_WAYTOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua     ANNOUNCE_NOWATERNEARBY = "only_used_by_waxwell_and_wicker",
+
+	--waxwell specific
+--fallback to speech_wilson.lua		ANNOUNCE_SHADOWLEVEL_ITEM = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T1 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T2 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T3 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T4 = "only_used_by_waxwell",
 
     --wolfgang specific
 --fallback to speech_wilson.lua     ANNOUNCE_NORMALTOMIGHTY = "only_used_by_wolfang",
@@ -466,6 +485,8 @@ return{
 --fallback to speech_wilson.lua         SAME_OLD_5 = "only_used_by_warly",
 --fallback to speech_wilson.lua 		TASTY = "only_used_by_warly",
     },
+
+	ANNOUNCE_FOODMEMORY = "only_used_by_warly",
 
     ANNOUNCE_ENCUMBERED =
     {
@@ -858,6 +879,8 @@ return{
     ANNOUNCE_PIRATES_ARRIVE = "Something scurvy this way comes.",
 
 --fallback to speech_wilson.lua     ANNOUNCE_BOOK_MOON_DAYTIME = "only_used_by_waxwell_and_wicker",
+
+    ANNOUNCE_OFF_SCRIPT = "You slipped, that's not in the script! Hyuyuyu!",
 
 	BATTLECRY =
 	{
@@ -1449,7 +1472,19 @@ return{
 
         TURF_SHELLBEACH = "Floor or ceiling, depending on your perspective.",
 
+		TURF_RUINSBRICK = "Floor or ceiling, depending on your perspective.",
+		TURF_RUINSBRICK_GLOW = "Floor or ceiling, depending on your perspective.",
+		TURF_RUINSTILES = "Floor or ceiling, depending on your perspective.",
+		TURF_RUINSTILES_GLOW = "Floor or ceiling, depending on your perspective.",
+		TURF_RUINSTRIM = "Floor or ceiling, depending on your perspective.",
+		TURF_RUINSTRIM_GLOW = "Floor or ceiling, depending on your perspective.",
+
         TURF_MONKEY_GROUND = "Floor or ceiling, depending on your perspective.",
+
+        TURF_CARPETFLOOR2 = "Floor or ceiling, depending on your perspective.",
+        TURF_MOSAIC_GREY = "Floor or ceiling, depending on your perspective.",
+        TURF_MOSAIC_RED = "Floor or ceiling, depending on your perspective.",
+        TURF_MOSAIC_BLUE = "Floor or ceiling, depending on your perspective.",
 
 		POWCAKE = "Hyuyu! This cake packs a wallop!",
         CAVE_ENTRANCE = "Clear the way I say!",
@@ -1633,6 +1668,10 @@ return{
             RARE = "Ooo, secret knowledge, what fun, what power!",
         },
         SKETCH = "Would you look at that!",
+		COOKINGRECIPECARD = 
+		{
+			GENERIC = "How mysterious, the card is blank!",
+		},
 		BLUE_CAP = "Funny tricks it tries to play.",
 		BLUE_CAP_COOKED = "That changed it somehow.",
 		BLUE_MUSHROOM =
@@ -1657,6 +1696,7 @@ return{
 		BUZZARD = "It doesn't want to feed on death. It just has to.",
 
 		SHADOWDIGGER = "So, what's he paying you?",
+        SHADOWDANCER = "Dance shadow man, dance! Hyuyu!",
 
 		CACTUS =
 		{
@@ -1819,6 +1859,7 @@ return{
 		},
         GOGGLESHAT = "I have to keep up appearances.",
         DESERTHAT = "I do so dislike having sand in my face fur.",
+        ANTLIONHAT = "I'd be lion if I said I wasn't antsy to try it, hyuyu!",
 		DEVTOOL = "It's a prank-maker.",
 		DEVTOOL_NODEV = "Whoops-a-doodle!",
 		DIRTPILE = "I could get my claws in there.",
@@ -2016,7 +2057,7 @@ return{
         {
 			GENERIC = "Still could use a piece or two.",
 			FUNNY = "A silly look, that's to be sure!",
-			COMPLETE = "That looks right at rain, it does it does!",
+			COMPLETE = "That looks right as rain, it does it does!",
         },
         STALKER = "Your mind's not quite right, but neither is mine!",
         STALKER_ATRIUM = "Shall we dance, dearest demon?",
@@ -2901,7 +2942,11 @@ return{
 		WATERMELON = "I do not want it.",
 		WATERMELON_COOKED = "Goodness, gracious, no no no!",
 		WATERMELONHAT = "Sticky horns await.",
-		WAXWELLJOURNAL = "I don't think he knows how to use it.",
+		WAXWELLJOURNAL =
+		{
+			GENERIC = "I don't think he knows how to use it.",
+--fallback to speech_wilson.lua			NEEDSFUEL = "only_used_by_waxwell",
+		},
 		WETGOOP = "Hyuyu! How repulsive.",
         WHIP = "Well this just seems cruel.",
 		WINTERHAT = "It'll keep my horns warm.",
@@ -4522,6 +4567,13 @@ return{
 
         SCANDATA = "Hyuyuyu, I think our friend has some tricks up those tin sleeves!",
 
+		-- QOL 2022
+		JUSTEGGS = "Mortals do love their eggs.",
+		VEGGIEOMLET = "A mortal dish. Or should I say, a mortal pan.",
+		TALLEGGS = "I thought I heard bagpipes!",
+		BEEFALOFEED = "It really sticks to the ribs, hyuyu!",
+		BEEFALOTREAT = "A beef so sweet deserves a treat.",
+
         -- Pirates
         BOAT_ROTATOR = "One good turn deserves another, hyuyu!",
         BOAT_ROTATOR_KIT = "It's something or rudder!",
@@ -4596,10 +4648,52 @@ return{
         PIRATE_STASH = "What a splendid \"X\"! Well worth the trip.",
         STASH_MAP = "This map has the clues I need, now where does it lead?",
 
-
         BANANAJUICE = "Mortals will eat bananas in just about any form.",
 
         FENCE_ROTATOR = "A sword against fences... we've all lost our senses!",
+
+        CHARLIE_STAGE_POST = "What a treat, a front-row seat!",
+        CHARLIE_LECTURN = "Hmm, what part to play today?",
+
+        CHARLIE_HECKLER = "Hyuyu, what a funny pair!",
+
+        PLAYBILL_THE_DOLL = "A curious tale of friendship and betrayal.",
+        STATUEHARP_HEDGESPAWNER = "The poor cherub and harp, lost in vines thorny sharp.",
+        HEDGEHOUND = "You wouldn't eat a fellow trickster, would you?",
+        HEDGEHOUND_BUSH = "Did those vines just whine? I'm sure it's fine.",
+
+        MASK_DOLLHAT = "A mask to place upon my face.",
+        MASK_DOLLBROKENHAT = "A mask to place upon my face.",
+        MASK_DOLLREPAIREDHAT = "A mask to place upon my face.",
+        MASK_BLACKSMITHHAT = "A mask to place upon my face.",
+        MASK_MIRRORHAT = "A mask to place upon my face.",
+        MASK_QUEENHAT = "A mask to place upon my face.",
+        MASK_KINGHAT = "A mask to place upon my face.",
+        MASK_TREEHAT = "A mask to place upon my face.",
+        MASK_FOOLHAT = "A mask to place upon my face.",
+
+        COSTUME_DOLL_BODY = "Hyuyuyu, oh this is a fun game!",
+        COSTUME_QUEEN_BODY = "Hyuyuyu, oh this is a fun game!",
+        COSTUME_KING_BODY = "Hyuyuyu, oh this is a fun game!",
+        COSTUME_BLACKSMITH_BODY = "Hyuyuyu, oh this is a fun game!",
+        COSTUME_MIRROR_BODY = "Hyuyuyu, oh this is a fun game!",
+        COSTUME_TREE_BODY = "Hyuyuyu, oh this is a fun game!",
+        COSTUME_FOOL_BODY = "Hyuyuyu, oh this is a fun game!",
+
+        STAGEUSHER =
+        {
+            STANDING = "Well hello there little friend.",
+            SITTING = "I see you!",
+        },
+        SEWING_MANNEQUIN =
+        {
+            GENERIC = "Not one for chatter, I gather?",
+            BURNT = "Is it in fashion to look so ashen?",
+        },
+
+		-- Waxwell
+		MAGICIAN_CHEST = "A clever trick to transport things quick.",
+		TOPHAT_MAGICIAN = "Hyuyuyu, he's up to his old tricks!",
     },
 
     DESCRIBE_GENERIC = "Ooo, a mystery!",

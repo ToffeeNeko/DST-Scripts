@@ -74,6 +74,7 @@ return {
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDERS = "It would be too easy, perhaps if there were more of these little guys...",
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDING_SPOTS = "There aren't a lot of places around for them to hide.",
 			KITCOON_HIDEANDSEEK_ONE_GAME_PER_DAY = "I think that's enough for one day.",
+            MANNEQUIN_EQUIPSWAPFAILED = "I don't think he can wear this.",
 		},
 		OPEN_CRAFTING =
 		{
@@ -393,6 +394,16 @@ return {
         {
             DOER_ISNT_MODULE_OWNER = "It doesn't seem interested in a scientific discussion.",
         },
+
+		CAST_SPELLBOOK =
+		{
+			NO_TOPHAT = "only_used_by_waxwell",
+		},
+
+		CASTAOE =
+		{
+			NO_MAX_SANITY = "only_used_by_waxwell",
+		},
     },
 
 	ANNOUNCE_CANNOT_BUILD =
@@ -414,6 +425,13 @@ return {
     ANNOUNCE_TOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
     ANNOUNCE_WAYTOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
     ANNOUNCE_NOWATERNEARBY = "only_used_by_waxwell_and_wicker",
+
+	--waxwell specific
+	ANNOUNCE_SHADOWLEVEL_ITEM = "only_used_by_waxwell",
+	ANNOUNCE_EQUIP_SHADOWLEVEL_T1 = "only_used_by_waxwell",
+	ANNOUNCE_EQUIP_SHADOWLEVEL_T2 = "only_used_by_waxwell",
+	ANNOUNCE_EQUIP_SHADOWLEVEL_T3 = "only_used_by_waxwell",
+	ANNOUNCE_EQUIP_SHADOWLEVEL_T4 = "only_used_by_waxwell",
 
     --wolfgang specific
     ANNOUNCE_NORMALTOMIGHTY = "only_used_by_wolfang",
@@ -477,6 +495,8 @@ return {
         SAME_OLD_5 = "only_used_by_warly",
 		TASTY = "only_used_by_warly",
     },
+
+	ANNOUNCE_FOODMEMORY = "only_used_by_warly",
 
     ANNOUNCE_ENCUMBERED =
     {
@@ -864,6 +884,8 @@ return {
     ANNOUNCE_PIRATES_ARRIVE = "That shanty can only mean one thing...",
 
     ANNOUNCE_BOOK_MOON_DAYTIME = "only_used_by_waxwell_and_wicker",
+
+    ANNOUNCE_OFF_SCRIPT = "I have a feeling that wasn't in the script.",
 
 	BATTLECRY =
 	{
@@ -1455,7 +1477,19 @@ return {
 
         TURF_SHELLBEACH = "A chunk of beach.",
 
+		TURF_RUINSBRICK = "Yet another ground type.",
+		TURF_RUINSBRICK_GLOW = "Yet another ground type.",
+		TURF_RUINSTILES = "Yet another ground type.",
+		TURF_RUINSTILES_GLOW = "Yet another ground type.",
+		TURF_RUINSTRIM = "Yet another ground type.",
+		TURF_RUINSTRIM_GLOW = "Yet another ground type.",
+
         TURF_MONKEY_GROUND = "A chunk of sand.",
+
+        TURF_CARPETFLOOR2 = "It's surprisingly soft.",
+        TURF_MOSAIC_GREY = "Yet another ground type.",
+        TURF_MOSAIC_RED = "Yet another ground type.",
+        TURF_MOSAIC_BLUE = "Yet another ground type.",
 
 		POWCAKE = "Science help us.",
         CAVE_ENTRANCE = "I wonder if that rock could be moved.",
@@ -1639,6 +1673,10 @@ return {
             RARE = "It's REALLY scientific!",
         },
         SKETCH = "A picture of a sculpture. We'll need somewhere to make it.",
+		COOKINGRECIPECARD = 
+		{
+			GENERIC = "Science help me, I can't decipher this handwriting.",
+		},
 		BLUE_CAP = "It's weird and gooey.",
 		BLUE_CAP_COOKED = "It's different now...",
 		BLUE_MUSHROOM =
@@ -1663,6 +1701,7 @@ return {
 		BUZZARD = "What a bizarre buzzard!",
 
 		SHADOWDIGGER = "Oh good. Now there's more of him.",
+        SHADOWDANCER = "Some things you can never unsee...",
 
 		CACTUS =
 		{
@@ -1824,6 +1863,7 @@ return {
 		},
         GOGGLESHAT = "What a stylish pair of goggles.",
         DESERTHAT = "Quality eye protection.",
+        ANTLIONHAT = "It's a groundbreaking scientific achievement.",
 		DEVTOOL = "It smells of bacon!",
 		DEVTOOL_NODEV = "I'm not strong enough to wield it.",
 		DIRTPILE = "It's a pile of dirt... or IS it?",
@@ -2906,7 +2946,11 @@ return {
 		WATERMELON = "Sticky sweet.",
 		WATERMELON_COOKED = "Juicy and warm.",
 		WATERMELONHAT = "Let the juice run down your face.",
-		WAXWELLJOURNAL = "Spooky.",
+		WAXWELLJOURNAL =
+		{
+			GENERIC = "Spooky.",
+			NEEDSFUEL = "only_used_by_waxwell",
+		},
 		WETGOOP = "It tastes like nothing.",
         WHIP = "Nothing like loud noises to help keep the peace.",
 		WINTERHAT = "It'll be good for when winter comes.",
@@ -4527,6 +4571,13 @@ return {
 
         SCANDATA = "Smells like fresh research.",
 
+		-- QOL 2022
+		JUSTEGGS = "It could use some bacon.",
+		VEGGIEOMLET = "Breakfast is the most scientific meal of the day.",
+		TALLEGGS = "A breakthrough in breakfast technology!",
+		BEEFALOFEED = "None for me, thank you.",
+		BEEFALOTREAT = "A bit too grainy for my taste.",
+
         -- Pirates
         BOAT_ROTATOR = "Things are going in the right direction. Or maybe the left.",
         BOAT_ROTATOR_KIT = "I think I'll take it out for a spin.",
@@ -4601,10 +4652,52 @@ return {
         PIRATE_STASH = "I'm diggin' the decor.",
         STASH_MAP = "It's nice to have some direction in life.",
 
-
         BANANAJUICE = "Makes me feel a bit rogueish.",
 
         FENCE_ROTATOR = "Enguard! Re-post!",
+
+        CHARLIE_STAGE_POST = "It's a setup! It feels too... staged.",
+        CHARLIE_LECTURN = "Is someone doing a play?",
+
+        CHARLIE_HECKLER = "They're just here to stir up drama.",
+
+        PLAYBILL_THE_DOLL = "\"Authored by C.W.\"",
+        STATUEHARP_HEDGESPAWNER = "The flowers grew back, but the head didn't.",
+        HEDGEHOUND = "It's an ambush!",
+        HEDGEHOUND_BUSH = "It's a bush.",
+
+        MASK_DOLLHAT = "It's a doll mask.",
+        MASK_DOLLBROKENHAT = "It's a cracked doll mask.",
+        MASK_DOLLREPAIREDHAT = "It was a doll mask at one point.",
+        MASK_BLACKSMITHHAT = "It's a blacksmith mask.",
+        MASK_MIRRORHAT = "It's a mask, but it looks like a mirror.",
+        MASK_QUEENHAT = "It's a Queen mask.",
+        MASK_KINGHAT = "It's a King mask.",
+        MASK_TREEHAT = "It's a tree mask.",
+        MASK_FOOLHAT = "It's a fool's mask.",
+
+        COSTUME_DOLL_BODY = "It's a doll costume.",
+        COSTUME_QUEEN_BODY = "It's a Queen costume.",
+        COSTUME_KING_BODY = "It's a King costume.",
+        COSTUME_BLACKSMITH_BODY = "It's a blacksmith costume.",
+        COSTUME_MIRROR_BODY = "It's a costume.",
+        COSTUME_TREE_BODY = "It's a tree costume.",
+        COSTUME_FOOL_BODY = "It's a fool's costume.",
+
+        STAGEUSHER =
+        {
+            STANDING = "Just keep your hand to yourself, alright?",
+            SITTING = "Something's odd here, but I can't put my finger on it.",
+        },
+        SEWING_MANNEQUIN =
+        {
+            GENERIC = "All dressed up and nowhere to go.",
+            BURNT = "All burnt up and nowhere to go.",
+        },
+
+		-- Waxwell
+		MAGICIAN_CHEST = "Why am I starting to feel a bit uneasy...?",
+		TOPHAT_MAGICIAN = "That hat just oozes style.",
     },
 
     DESCRIBE_GENERIC = "It's a... thing.",

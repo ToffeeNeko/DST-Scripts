@@ -64,6 +64,7 @@ return{
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDERS = "It'll be more fun with more kitcoons.",
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDING_SPOTS = "It's okay, but maybe we can find a place with more hiding spots.",
 			KITCOON_HIDEANDSEEK_ONE_GAME_PER_DAY = "That was fun! Can we play again tomorrow?",
+            MANNEQUIN_EQUIPSWAPFAILED = "Actually, maybe we'll just keep it instead.",
 		},
 		OPEN_CRAFTING =
 		{
@@ -110,6 +111,7 @@ return{
 --fallback to speech_wilson.lua             NOSLEEPTARGETS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua             TOOMANYBEES = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua             NOMOONINCAVES = "only_used_by_waxwell_and_wicker",
+--fallback to speech_wilson.lua             ALREADYFULLMOON = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua         },
 
         GIVE =
@@ -382,6 +384,16 @@ return{
         {
             DOER_ISNT_MODULE_OWNER = "We don't think Jimmy wants to play.",
         },
+
+		CAST_SPELLBOOK =
+		{
+--fallback to speech_wilson.lua			NO_TOPHAT = "only_used_by_waxwell",
+		},
+
+		CASTAOE =
+		{
+--fallback to speech_wilson.lua			NO_MAX_SANITY = "only_used_by_waxwell",
+		},
     },
 
 	ANNOUNCE_CANNOT_BUILD =
@@ -403,6 +415,13 @@ return{
 --fallback to speech_wilson.lua     ANNOUNCE_TOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua     ANNOUNCE_WAYTOOMANYBIRDS = "only_used_by_waxwell_and_wicker",
 --fallback to speech_wilson.lua     ANNOUNCE_NOWATERNEARBY = "only_used_by_waxwell_and_wicker",
+
+	--waxwell specific
+--fallback to speech_wilson.lua		ANNOUNCE_SHADOWLEVEL_ITEM = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T1 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T2 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T3 = "only_used_by_waxwell",
+--fallback to speech_wilson.lua		ANNOUNCE_EQUIP_SHADOWLEVEL_T4 = "only_used_by_waxwell",
 
     --wolfgang specific
 --fallback to speech_wilson.lua     ANNOUNCE_NORMALTOMIGHTY = "only_used_by_wolfang",
@@ -466,6 +485,8 @@ return{
 --fallback to speech_wilson.lua         SAME_OLD_5 = "only_used_by_warly",
 --fallback to speech_wilson.lua 		TASTY = "only_used_by_warly",
     },
+
+	ANNOUNCE_FOODMEMORY = "only_used_by_warly",
 
     ANNOUNCE_ENCUMBERED =
     {
@@ -853,6 +874,8 @@ return{
     ANNOUNCE_PIRATES_ARRIVE = "Uh oh... we're not sure we like the sound of that.",
 
 --fallback to speech_wilson.lua     ANNOUNCE_BOOK_MOON_DAYTIME = "only_used_by_waxwell_and_wicker",
+
+    ANNOUNCE_OFF_SCRIPT = "Is that how the play is supposed to go?",
 
 	BATTLECRY =
 	{
@@ -1444,7 +1467,19 @@ return{
 
         TURF_SHELLBEACH = "Some ground that we dug up.",
 
+		TURF_RUINSBRICK = "Some very old stones.",
+		TURF_RUINSBRICK_GLOW = "It looks old, but it's not really.",
+		TURF_RUINSTILES = "Some very old stones.",
+		TURF_RUINSTILES_GLOW = "It looks old, but it's not really.",
+		TURF_RUINSTRIM = "Some very old stones.",
+		TURF_RUINSTRIM_GLOW = "It looks old, but it's not really.",
+
         TURF_MONKEY_GROUND = "It kinda smells like bananas!",
+
+        TURF_CARPETFLOOR2 = "Rosy cozy carpet!",
+        TURF_MOSAIC_GREY = "Some ground that we dug up.",
+        TURF_MOSAIC_RED = "Some ground that we dug up.",
+        TURF_MOSAIC_BLUE = "Some ground that we dug up.",
 
 		POWCAKE = "Mum never let me have these.",
         CAVE_ENTRANCE = "It's plugged up.",
@@ -1628,6 +1663,10 @@ return{
             RARE = "This one feels special.",
         },
         SKETCH = "We need somewhere to make it!",
+		COOKINGRECIPECARD = 
+		{
+			GENERIC = "We can't read what it says!",
+		},
 		BLUE_CAP = "You'd have to be crazy...",
 		BLUE_CAP_COOKED = "Good thing we're feeling healthy.",
 		BLUE_MUSHROOM =
@@ -1652,6 +1691,7 @@ return{
 		BUZZARD = "You won't find any carrion here. We're stuck like this.",
 
 		SHADOWDIGGER = "Sometimes scary things are nice.",
+        SHADOWDANCER = "We'll dance with you, Mr. Shadow!",
 
 		CACTUS =
 		{
@@ -1813,6 +1853,7 @@ return{
 		},
         GOGGLESHAT = "We wish it had eight lenses.",
         DESERTHAT = "It covers our biggest eyes, anyway.",
+        ANTLIONHAT = "We can pretend we're an Antlion!",
 		DEVTOOL = "Axe me a question!",
 		DEVTOOL_NODEV = "I can't wield that.",
 		DIRTPILE = "A pile of dirt. I bet it's hiding something.",
@@ -2895,7 +2936,11 @@ return{
 		WATERMELON = "Looks tasty!",
 		WATERMELON_COOKED = "Anything can be cooked!",
 		WATERMELONHAT = "This is the best idea anyone's ever had.",
-		WAXWELLJOURNAL = "I don't think we should play with that...",
+		WAXWELLJOURNAL =
+		{
+			GENERIC = "I don't think we should play with that...",
+--fallback to speech_wilson.lua			NEEDSFUEL = "only_used_by_waxwell",
+		},
 		WETGOOP = "Experimenting is fun!",
         WHIP = "Oooh, it makes so much noise!",
 		WINTERHAT = "Mum always said I should take a cap with me.",
@@ -4516,6 +4561,13 @@ return{
 
         SCANDATA = "Wow, it learned all that just by looking really hard?",
 
+		-- QOL 2022
+		JUSTEGGS = "Can we have pancakes instead?",
+		VEGGIEOMLET = "Stop trying to trick us into eating our veggies!",
+		TALLEGGS = "Crunchy!",
+		BEEFALOFEED = "We take good care of our beefalo.",
+		BEEFALOTREAT = "Good beefalo deserve treats.",
+
         -- Pirates
         BOAT_ROTATOR = "We can turn the boat like a merry-go-round!",
         BOAT_ROTATOR_KIT = "We're good at spinning things!",
@@ -4590,10 +4642,52 @@ return{
         PIRATE_STASH = "We found the treasure!",
         STASH_MAP = "It's a real treasure map!",
 
-
         BANANAJUICE = "Mmmm, cold and banana-y.",
 
         FENCE_ROTATOR = "We're allowed to hit fence posts with it, just not too hard.",
+
+        CHARLIE_STAGE_POST = "Oooh! Let's put on a play!",
+        CHARLIE_LECTURN = "Maybe we can play one of the characters!",
+
+        CHARLIE_HECKLER = "We don't like those birds very much.",
+
+        PLAYBILL_THE_DOLL = "What a funny play!",
+        STATUEHARP_HEDGESPAWNER = "This place is making our spider-hairs tingle...",
+        HEDGEHOUND = "Did we say something wrong?!",
+        HEDGEHOUND_BUSH = "Look at all those pretty red roses.",
+
+        MASK_DOLLHAT = "We can pretend to be somebody else!",
+        MASK_DOLLBROKENHAT = "We can pretend to be somebody else!",
+        MASK_DOLLREPAIREDHAT = "We can pretend to be somebody else!",
+        MASK_BLACKSMITHHAT = "We can pretend to be somebody else!",
+        MASK_MIRRORHAT = "We can pretend to be somebody else!",
+        MASK_QUEENHAT = "We can pretend to be somebody else!",
+        MASK_KINGHAT = "We can pretend to be somebody else!",
+        MASK_TREEHAT = "We can pretend to be somebody else!",
+        MASK_FOOLHAT = "We can pretend to be somebody else!",
+
+        COSTUME_DOLL_BODY = "We can wear it in the play!",
+        COSTUME_QUEEN_BODY = "We can wear it in the play!",
+        COSTUME_KING_BODY = "We can wear it in the play!",
+        COSTUME_BLACKSMITH_BODY = "We can wear it in the play!",
+        COSTUME_MIRROR_BODY = "We can wear it in the play!",
+        COSTUME_TREE_BODY = "We can wear it in the play!",
+        COSTUME_FOOL_BODY = "We can wear it in the play!",
+
+        STAGEUSHER =
+        {
+            STANDING = "Definitely not a spider!",
+            SITTING = "Is there a spider friend rustling beneath?",
+        },
+        SEWING_MANNEQUIN =
+        {
+            GENERIC = "Let's play dress up!",
+            BURNT = "Aww, we wanted to play dress-up...",
+        },
+
+		-- Waxwell
+		MAGICIAN_CHEST = "Could we borrow it for hide-and-seek?",
+		TOPHAT_MAGICIAN = "Not quite like father used to wear.",
     },
 
     DESCRIBE_GENERIC = "Can we play with it?",

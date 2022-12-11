@@ -36,7 +36,7 @@ local KitcoonPuppet = require "widgets/kitcoonpuppet"
 local SHOW_DST_DEBUG_HOST_JOIN = BRANCH == "dev"
 local SHOW_QUICKJOIN = false
 
-local IS_BETA = BRANCH == "staging" or BRANCH == "dev"
+local IS_BETA = BRANCH == "staging" --or BRANCH == "dev"
 local IS_DEV_BUILD = BRANCH == "dev"
 
 local function PlayBannerSound(inst, self, sound)
@@ -290,6 +290,32 @@ local function MakePiratesBanner(self, banner_root, anim)
     anim:SetScale(.667)
 end
 
+local function MakeDramaBanner(self, banner_root, anim)
+    local anim_bg = banner_root:AddChild(UIAnim())
+    anim_bg:GetAnimState():SetBuild("dst_menu_charlie2")
+    anim_bg:GetAnimState():SetBank("dst_menu_charlie2")
+    anim_bg:GetAnimState():PlayAnimation("loop_bg", true)
+    anim_bg:SetScale(0.667)
+    anim_bg:MoveToBack()
+
+	if IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) then
+		anim:GetAnimState():SetBuild("dst_menu_charlie_halloween")
+		anim:GetAnimState():SetBank ("dst_menu_charlie_halloween")
+	else
+		anim:GetAnimState():SetBuild("dst_menu_charlie")
+		anim:GetAnimState():SetBank ("dst_menu_charlie")
+	end
+    anim:GetAnimState():PlayAnimation("loop", true)
+    anim:SetScale(0.667)
+end
+
+local function MakeWaxwellBanner(self, banner_root, anim)
+    anim:GetAnimState():SetBuild("dst_menu_waxwell")
+    anim:GetAnimState():SetBank("dst_menu_waxwell")
+    anim:GetAnimState():PlayAnimation("loop", true)
+    anim:SetScale(.667)
+end
+
 local function MakeDefaultBanner(self, banner_root, anim)
 	local banner_height = 350
 	banner_root:SetPosition(0, RESOLUTION_Y / 2 - banner_height / 2 + 1 ) -- positioning for when we had the top banner art
@@ -339,17 +365,19 @@ function MakeBanner(self)
 
 	if IS_BETA then
 		title_str = STRINGS.UI.MAINSCREEN.MAINBANNER_BETA_TITLE
-        MakeWickerbottomBanner(self, banner_root, anim)
+        MakeWaxwellBanner(self, banner_root, anim)
 	elseif IsSpecialEventActive(SPECIAL_EVENTS.YOTC) then
         MakeYOTCBanner(self, banner_root, anim)
 	elseif IsSpecialEventActive(SPECIAL_EVENTS.YOT_CATCOON) then
         MakeYOTCatcoonBanner(self, banner_root, anim)
 	elseif IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) then
-        MakeHallowedNightsBanner(self, banner_root, anim)
+		MakeDramaBanner(self, banner_root, anim)
+        --MakeHallowedNightsBanner(self, banner_root, anim)
 	elseif IsSpecialEventActive(SPECIAL_EVENTS.CARNIVAL) then
         MakeCawnivalBanner(self, banner_root, anim)
 	else
-        MakeWickerbottomBanner(self, banner_root, anim)
+		MakeWaxwellBanner(self, banner_root, anim)
+        --MakeDramaBanner(self, banner_root, anim)
         --MakeDefaultBanner(self, banner_root, anim)
         --MakePiratesBanner(self, banner_root, anim)
         --MakeWX78Banner(self, banner_root, anim)
@@ -395,25 +423,44 @@ local function MakeWX78BannerFront(self, banner_front, anim)
     anim:SetScale(0.667)
 end
 
+local function MakeDramaBannerFront(self, banner_front, anim)
+	if IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) then
+		anim:GetAnimState():SetBuild("dst_menu_charlie_halloween")
+		anim:GetAnimState():SetBank ("dst_menu_charlie_halloween")
+	else
+		anim:GetAnimState():SetBuild("dst_menu_charlie")
+		anim:GetAnimState():SetBank ("dst_menu_charlie")
+	end
+    anim:GetAnimState():PlayAnimation("overlay", true)
+    anim:SetScale(0.667)
+end
+
 -- For drawing things in front of the MOTD panels
 local function MakeBannerFront(self)
     if IS_BETA then
-        
-        --[[local banner_front = Widget("banner_front")
+        local banner_front = Widget("banner_front")
         banner_front:SetPosition(0, 0)
+        banner_front:SetClickable(false)
         local anim = banner_front:AddChild(UIAnim())
 
-        MakeWickerbottomBannerFront(self, banner_front, anim)
+        MakeDramaBannerFront(self, banner_front, anim)
 
-        return banner_front]]
-        return nil
-        
+        return banner_front
+
     elseif IsSpecialEventActive(SPECIAL_EVENTS.YOTC) then
         return nil
     elseif IsSpecialEventActive(SPECIAL_EVENTS.YOT_CATCOON) then
         return nil
     elseif IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) then
-        return nil
+        local banner_front = Widget("banner_front")
+        banner_front:SetPosition(0, 0)
+        banner_front:SetClickable(false)
+        local anim = banner_front:AddChild(UIAnim())
+
+        MakeDramaBannerFront(self, banner_front, anim)
+
+        return banner_front
+
     elseif IsSpecialEventActive(SPECIAL_EVENTS.CARNIVAL) then
         return nil
     else
@@ -514,7 +561,8 @@ function MultiplayerMainScreen:DoInit()
     self.onlinestatus = self.fixed_root:AddChild(OnlineStatus( true ))
 
     --TODO(Peter) put the snowflakes back in after 2021
-	--[[if IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) then
+	--[
+    if IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) then
 		self.banner_snowfall = self.banner_root:AddChild(TEMPLATES.old.Snowfall(-.39 * RESOLUTION_Y, .35, 3, 15))
 		self.banner_snowfall:SetVAnchor(ANCHOR_TOP)
 		self.banner_snowfall:SetHAnchor(ANCHOR_MIDDLE)
@@ -524,7 +572,8 @@ function MultiplayerMainScreen:DoInit()
 		self.snowfall:SetVAnchor(ANCHOR_TOP)
 		self.snowfall:SetHAnchor(ANCHOR_MIDDLE)
 		self.snowfall:SetScaleMode(SCALEMODE_PROPORTIONAL)
-	end]]
+	end
+    --]
 
     ----------------------------------------------------------
 	-- new MOTD

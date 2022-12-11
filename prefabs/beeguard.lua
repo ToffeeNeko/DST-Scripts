@@ -10,6 +10,8 @@ local prefabs =
     "bee_poof_big",
     "bee_poof_small",
     "stinger",
+	"ocean_splash_med1",
+	"ocean_splash_med2",
 }
 
 --------------------------------------------------------------------------
@@ -133,6 +135,7 @@ local FRIENDLYBEES_MUST = { "_combat", "_health" }
 local FRIENDLYBEES_CANT = { "INLIMBO", "noauradamage", "bee", "companion" }
 local FRIENDLYBEES_MUST_ONE = { "monster", "prey" }
 local FRIENDLYBEES_PVP = nil
+local BEE_STUCK_MUST = { "_combat" }
 local function RetargetFn(inst)
     if inst:IsFriendly() then
         if inst:GetQueen() == nil then -- NOTES(JBK): A friendly bee must wait for its queen to take action.
@@ -163,14 +166,31 @@ local function RetargetFn(inst)
         end
 
         return nil
-    else
-        local focustarget = CheckFocusTarget(inst)
-        if focustarget ~= nil then
-            return focustarget, not inst.components.combat:TargetIs(focustarget)
-        end
-        local player, distsq = inst:GetNearestPlayer()
-        return (distsq ~= nil and distsq < 225) and player or nil
     end
+
+	local focustarget = CheckFocusTarget(inst)
+	if focustarget ~= nil then
+		return focustarget, not inst.components.combat:TargetIs(focustarget)
+	end
+
+	if inst.components.combat:HasTarget() and inst.components.stuckdetection:IsStuck() then
+		local queen = inst:GetQueen()
+		if queen ~= nil then
+			local commander = queen.components.commander
+			local x, y, z = inst.Transform:GetWorldPosition()
+			for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.BEEGUARD_ATTACK_RANGE + 3, BEE_STUCK_MUST)) do
+				if v ~= inst then
+					local target = v.components.combat.target
+					if target == queen or (commander ~= nil and commander:IsSoldier(target)) then
+						return v, true
+					end
+				end
+			end
+		end
+	end
+
+	local player, distsq = inst:GetNearestPlayer()
+	return (distsq ~= nil and distsq < 225) and player or nil
 end
 
 local function KeepTargetFn(inst, target)
@@ -204,6 +224,8 @@ local function OnAttacked(inst, data)
 end
 
 local function OnAttackOther(inst, data)
+	inst.components.stuckdetection:Reset()
+
     if data.target ~= nil and data.target.components.inventory ~= nil then
         for k, eslot in pairs(EQUIPSLOTS) do
             local equip = data.target.components.inventory:GetEquippedItem(eslot)
@@ -245,6 +267,15 @@ end
 local function AddToArmy(inst, queen)
     if queen:HasTag("player") then
         queen:MakeGenericCommander()
+        if inst.components.follower == nil then
+            inst:AddComponent("follower")
+            inst.components.follower:SetLeader(queen)
+        end
+    else
+        if inst.components.follower ~= nil then
+            inst.components.follower:StopFollowing()
+            inst:RemoveComponent("follower")
+        end
     end
     if queen.components.commander ~= nil then
         queen.components.commander:AddSoldier(inst)
@@ -255,8 +286,11 @@ local function TryToFindQueen(inst) -- Only should be called with a player and h
     local queen = LookupPlayerInstByUserID(inst._friendid)
     if queen then
         AddFriendListener(inst, queen)
-        AddToArmy(inst, queen)
-        inst._findqueentask = nil
+        inst:AddToArmy(queen)
+        if inst._findqueentask then
+            inst._findqueentask:Cancel()
+            inst._findqueentask = nil
+        end
         if inst._fleetask then
             inst._fleetask:Cancel()
             inst._fleetask = nil
@@ -292,7 +326,7 @@ end
 local function OnLoadPostPass(inst)
     local queen = inst:GetQueen()
     if queen ~= nil then
-        AddToArmy(inst, queen)
+        inst:AddToArmy(queen)
     else
         inst:StartFindingPlayerQueenTasks()
     end
@@ -348,12 +382,14 @@ local function OnGotCommander(inst, data)
     if queen ~= data.commander then
         inst.components.entitytracker:ForgetEntity("queen")
         RemoveFriendListener(inst)
+        local realqueen = false
         if data.commander:HasTag("player") then
             inst:MakeFriendly(data.commander.userid)
             AddFriendListener(inst, data.commander)
         else
             inst.components.entitytracker:TrackEntity("queen", data.commander)
             inst:MakeHostile()
+            realqueen = true
         end
 
         local allbeeguards = data.commander.components.commander:GetAllSoldiers("beeguard")
@@ -361,11 +397,25 @@ local function OnGotCommander(inst, data)
         if totalbeeguards > 0 then
             table.sort(allbeeguards, BeeSort)
             local radius = TUNING.BEEGUARD_GUARD_RANGE
+            local qx, qy, qz = data.commander.Transform:GetWorldPosition()
             for i, v in ipairs(allbeeguards) do
                 local angle = PI2 * (i - math.random()) / totalbeeguards
                 local radiusoffset = math.random() * 2 - 1 + 2 * (i % 2)
                 local offset = Vector3((radius + radiusoffset) * math.cos(angle), 0, (radius + radiusoffset) * math.sin(angle))
                 v.components.knownlocations:RememberLocation("queenoffset", offset, false)
+
+				-- NOTES(JBK): This is an edge case hack fixup so these bees do not get lost from being too far from a real Bee Queen.
+				-- V2C: Updated hack to use sleep status instead of range.
+				if realqueen and v:IsAsleep() then
+					if v.components.health:IsDead() or v.sg:HasStateTag("flight") then
+						v:Remove()
+					elseif not v:HasTag("rooted") then
+						v.Physics:Teleport(qx + offset.x, qy + offset.y, qz + offset.z)
+						if not data.commander:IsAsleep() then
+							v.sg:GoToState("spawnin", data.commander)
+						end
+					end
+                end
             end
         end
     end
@@ -389,11 +439,8 @@ local function CheckBeeQueen(inst, data)
     if target ~= nil and commander ~= nil and commander:HasTag("player") and target:HasTag("beequeen") then
         inst:MakeHostile()
         commander.components.commander:RemoveSoldier(inst)
-        target.components.commander:AddSoldier(inst)
-        
-        inst.components.follower:StopFollowing()
-        inst:RemoveComponent("follower")
-        
+        inst:AddToArmy(target)
+
         if target.components.combat:HasTarget() then
             inst.components.combat:SetTarget(target.components.combat.target)
         else
@@ -439,6 +486,9 @@ local function fn()
 
     MakeInventoryFloatable(inst)
 
+    --Sneak this into pristine state for optimization
+    inst:AddTag("__follower")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -446,6 +496,10 @@ local function fn()
     end
 
     inst.recentlycharged = {}
+
+    --Remove this tag so that they can be added properly when replicating below
+    inst:RemoveTag("__follower")
+    inst:PrereplicateComponent("follower")
 
     inst:AddComponent("inspectable")
 
@@ -478,6 +532,9 @@ local function fn()
     inst.components.combat.hiteffectsymbol = "mane"
     inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
 
+	inst:AddComponent("stuckdetection")
+	inst.components.stuckdetection:SetTimeToStuck(2)
+
     inst:AddComponent("entitytracker")
     inst:AddComponent("knownlocations")
 
@@ -507,6 +564,7 @@ local function fn()
     inst.StartFindingPlayerQueenTasks = StartFindingPlayerQueenTasks
     inst.GetQueen = GetQueen
     inst.MakeHostile = MakeHostile
+    inst.AddToArmy = AddToArmy
     inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
     inst.OnSave = OnSave

@@ -26,7 +26,7 @@ local function onequip_red(inst, owner)
         owner.AnimState:OverrideSymbol("swap_body", "torso_amulets", "redamulet")
     end
 
-    inst.task = inst:DoPeriodicTask(30, healowner, nil, owner)
+    inst.task = inst:DoPeriodicTask(TUNING.REDAMULET_CONVERSION_TIME, healowner, nil, owner)
 end
 
 local function onunequip_red(inst, owner)
@@ -39,6 +39,13 @@ local function onunequip_red(inst, owner)
         owner:PushEvent("unequipskinneditem", inst:GetSkinName())
     end
 
+    if inst.task ~= nil then
+        inst.task:Cancel()
+        inst.task = nil
+    end
+end
+
+local function onequiptomodel_red(inst, owner, from_ground)
     if inst.task ~= nil then
         inst.task:Cancel()
         inst.task = nil
@@ -75,6 +82,14 @@ local function onunequip_blue(inst, owner)
     end
 end
 
+local function onequiptomodel_blue(inst, owner, from_ground)
+    inst:RemoveEventCallback("attacked", inst.freezefn, owner)
+
+    if inst.components.fueled then
+        inst.components.fueled:StopConsuming()
+    end
+end
+
 ---PURPLE
 local function onequip_purple(inst, owner)
     owner.AnimState:OverrideSymbol("swap_body", "torso_amulets", "purpleamulet")
@@ -96,13 +111,28 @@ local function onunequip_purple(inst, owner)
     end
 end
 
+local function onequiptomodel_purple(inst, owner, from_ground)
+    if inst.components.fueled then
+        inst.components.fueled:StopConsuming()
+    end
+    if owner.components.sanity ~= nil then
+        owner.components.sanity:SetInducedInsanity(inst, false)
+    end
+end
+
 ---GREEN
 
 local function onequip_green(inst, owner)
     owner.AnimState:OverrideSymbol("swap_body", "torso_amulets", "greenamulet")
-    owner.components.builder.ingredientmod = TUNING.GREENAMULET_INGREDIENTMOD
-    inst.onitembuild = function()
-        inst.components.finiteuses:Use(1)
+    if owner.components.builder ~= nil then
+        owner.components.builder.ingredientmod = TUNING.GREENAMULET_INGREDIENTMOD
+    end
+    inst.onitembuild = function(owner, data)
+        --V2C: backward compatibility so that no data or discounted == nil still consumes a charge
+        --     (discounted is newly added; in the past, it would always consume a charge)
+        if not (data ~= nil and data.discounted == false) then
+            inst.components.finiteuses:Use(1)
+        end
     end
     inst:ListenForEvent("consumeingredients", inst.onitembuild, owner)
 
@@ -110,7 +140,16 @@ end
 
 local function onunequip_green(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
-    owner.components.builder.ingredientmod = 1
+    if owner.components.builder ~= nil then
+        owner.components.builder.ingredientmod = 1
+    end
+    inst:RemoveEventCallback("consumeingredients", inst.onitembuild, owner)
+end
+
+local function onequiptomodel_green(inst, owner, from_ground)
+    if owner.components.builder ~= nil then
+        owner.components.builder.ingredientmod = 1
+    end
     inst:RemoveEventCallback("consumeingredients", inst.onitembuild, owner)
 end
 
@@ -162,6 +201,13 @@ local function onunequip_orange(inst, owner)
     end
 end
 
+local function onequiptomodel_orange(inst, owner, from_ground)
+    if inst.task ~= nil then
+        inst.task:Cancel()
+        inst.task = nil
+    end
+end
+
 ---YELLOW
 local function onequip_yellow(inst, owner)
     local skin_build = inst:GetSkinBuild()
@@ -185,6 +231,10 @@ local function onequip_yellow(inst, owner)
         owner.components.bloomer:PushBloom(inst, "shaders/anim.ksh", 1)
     else
         owner.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    end
+    
+    if inst.skin_equip_sound and owner.SoundEmitter then
+        owner.SoundEmitter:PlaySound(inst.skin_equip_sound)
     end
 end
 
@@ -218,10 +268,41 @@ local function onunequip_yellow(inst, owner)
     turnoff_yellow(inst)
 end
 
-local function onfuelchanged_yellow(inst, data)
-    if data and data.percent and data.oldpercent and data.percent > data.oldpercent then
-        inst.SoundEmitter:PlaySound("dontstarve/common/nightmareAddFuel")
+local function onequiptomodel_yellow(inst, owner, from_ground)
+    if owner.components.bloomer ~= nil then
+        owner.components.bloomer:PopBloom(inst)
+    else
+        owner.AnimState:ClearBloomEffectHandle()
     end
+
+    if inst.components.fueled ~= nil then
+        inst.components.fueled:StopConsuming()
+    end
+
+    turnoff_yellow(inst)
+end
+
+local function CLIENT_PlayFuelSound(inst)
+	local parent = inst.entity:GetParent()
+	local container = parent ~= nil and (parent.replica.inventory or parent.replica.container) or nil
+	if container ~= nil and container:IsOpenedBy(ThePlayer) then
+		TheFocalPoint.SoundEmitter:PlaySound("dontstarve/common/nightmareAddFuel")
+	end
+end
+
+local function SERVER_PlayFuelSound(inst)
+	local owner = inst.components.inventoryitem.owner
+	if owner == nil then
+		inst.SoundEmitter:PlaySound("dontstarve/common/nightmareAddFuel")
+	elseif inst.components.equippable:IsEquipped() and owner.SoundEmitter ~= nil then
+		owner.SoundEmitter:PlaySound("dontstarve/common/nightmareAddFuel")
+	else
+		inst.playfuelsound:push()
+		--Dedicated server does not need to trigger sfx
+		if not TheNet:IsDedicated() then
+			CLIENT_PlayFuelSound(inst)
+		end
+	end
 end
 
 ---COMMON FUNCTIONS
@@ -239,7 +320,7 @@ local function unimplementeditem(inst)
 end
 --]]
 
-local function commonfn(anim, tag, should_sink)
+local function commonfn(anim, tag, should_sink, can_refuel)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -253,11 +334,23 @@ local function commonfn(anim, tag, should_sink)
     inst.AnimState:SetBuild("amulets")
     inst.AnimState:PlayAnimation(anim)
 
+	--shadowlevel (from shadowlevel component) added to pristine state for optimization
+	inst:AddTag("shadowlevel")
+
     if tag ~= nil then
         inst:AddTag(tag)
     end
 
     inst.foleysound = "dontstarve/movement/foley/jewlery"
+
+	if can_refuel then
+		inst.playfuelsound = net_event(inst.GUID, "amulet.playfuelsound")
+
+		if not TheWorld.ismastersim then
+			--delayed because we don't want any old events
+			inst:DoTaskInTime(0, inst.ListenForEvent, "amulet.playfuelsound", CLIENT_PlayFuelSound)
+		end
+	end
 
     if not should_sink then
         MakeInventoryFloatable(inst, "med", nil, 0.6)
@@ -281,6 +374,9 @@ local function commonfn(anim, tag, should_sink)
         inst.components.inventoryitem:SetSinks(true)
     end
 
+	inst:AddComponent("shadowlevel")
+	inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
+
     return inst
 end
 
@@ -297,6 +393,7 @@ local function red()
 
     inst.components.equippable:SetOnEquip(onequip_red)
     inst.components.equippable:SetOnUnequip(onunequip_red)
+    inst.components.equippable:SetOnEquipToModel(onequiptomodel_red)
 
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetOnFinished(inst.Remove)
@@ -335,6 +432,8 @@ local function blue()
 
     inst.components.equippable:SetOnEquip(onequip_blue)
     inst.components.equippable:SetOnUnequip(onunequip_blue)
+    inst.components.equippable:SetOnEquipToModel(onequiptomodel_blue)
+
     inst:AddComponent("heater")
     inst.components.heater:SetThermics(false, true)
     inst.components.heater.equippedheat = TUNING.BLUEGEM_COOLER
@@ -366,6 +465,7 @@ local function purple()
 
     inst.components.equippable:SetOnEquip(onequip_purple)
     inst.components.equippable:SetOnUnequip(onunequip_purple)
+    inst.components.equippable:SetOnEquipToModel(onequiptomodel_purple)
 
     inst.components.equippable.dapperness = -TUNING.DAPPERNESS_MED
 
@@ -383,6 +483,7 @@ local function green()
 
     inst.components.equippable:SetOnEquip(onequip_green)
     inst.components.equippable:SetOnUnequip(onunequip_green)
+    inst.components.equippable:SetOnEquipToModel(onequiptomodel_green)
 
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetOnFinished(inst.Remove)
@@ -395,7 +496,7 @@ local function green()
 end
 
 local function orange()
-    local inst = commonfn("orangeamulet")
+    local inst = commonfn("orangeamulet", "repairshortaction")
 
     if not TheWorld.ismastersim then
         return inst
@@ -406,11 +507,16 @@ local function orange()
     -- inst.components.useableitem:SetOnUseFn(unimplementeditem)
     inst.components.equippable:SetOnEquip(onequip_orange)
     inst.components.equippable:SetOnUnequip(onunequip_orange)
+    inst.components.equippable:SetOnEquipToModel(onequiptomodel_orange)
 
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetOnFinished(inst.Remove)
     inst.components.finiteuses:SetMaxUses(TUNING.ORANGEAMULET_USES)
     inst.components.finiteuses:SetUses(TUNING.ORANGEAMULET_USES)
+
+    inst:AddComponent("repairable")
+    inst.components.repairable.repairmaterial = MATERIALS.NIGHTMARE
+    inst.components.repairable.noannounce = true
 
     MakeHauntableLaunch(inst)
 
@@ -418,7 +524,7 @@ local function orange()
 end
 
 local function yellow()
-    local inst = commonfn("yellowamulet")
+    local inst = commonfn("yellowamulet", nil, nil, true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -426,6 +532,7 @@ local function yellow()
 
     inst.components.equippable:SetOnEquip(onequip_yellow)
     inst.components.equippable:SetOnUnequip(onunequip_yellow)
+    inst.components.equippable:SetOnEquipToModel(onequiptomodel_yellow)
     inst.components.equippable.walkspeedmult = 1.2
     inst.components.inventoryitem:SetOnDroppedFn(turnoff_yellow)
 
@@ -435,7 +542,7 @@ local function yellow()
     inst.components.fueled:SetDepletedFn(inst.Remove)
     inst.components.fueled:SetFirstPeriod(TUNING.TURNON_FUELED_CONSUMPTION, TUNING.TURNON_FULL_FUELED_CONSUMPTION)
     inst.components.fueled.accepting = true
-    inst:ListenForEvent("percentusedchange", onfuelchanged_yellow)
+	inst.components.fueled:SetTakeFuelFn(SERVER_PlayFuelSound)
 
     MakeHauntableLaunch(inst)
 

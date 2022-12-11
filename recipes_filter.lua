@@ -150,6 +150,8 @@ CRAFTING_FILTERS.CHARACTER.recipes =
 	"book_light_upgraded",
 
 	-- Maxwell
+	"tophat_magician",
+	"magician_chest",
 	"waxwelljournal",
 
 	-- Winona
@@ -255,6 +257,8 @@ CRAFTING_FILTERS.CRAFTING_STATION.recipes =
 	"armorruins",
 	"ruins_bat",
 	"eyeturret_item",
+	"blueprint_craftingset_ruins_builder",
+	"blueprint_craftingset_ruinsglow_builder",
 
 	-- cartography desk
 	"mapscroll",
@@ -476,6 +480,7 @@ CRAFTING_FILTERS.TOOLS.recipes =
 	"goldenpickaxe",
 	"goldenshovel",
 	"golden_farm_hoe",
+	"goldenpitchfork",
 	"trap",
 	"birdtrap",
 	"bugnet",
@@ -492,14 +497,16 @@ CRAFTING_FILTERS.TOOLS.recipes =
 	"oceanfishingrod",
 	"pocket_scale",
 	"beef_bell",
-	"pocketwatch_dismantler",
 	"saddlehorn",
 	"brush",
+	"antlionhat",
 	"featherpencil",
 	"sentryward",
 	"archive_resonator_item",
+
 	"reskin_tool",
 
+	"pocketwatch_dismantler",
 	"balloons_empty",
 	"spiderden_bedazzler",
 	"spider_whistle",
@@ -643,12 +650,14 @@ CRAFTING_FILTERS.CLOTHING.recipes =
 	"kelphat",
 	"strawhat",
 	"tophat",
+	"tophat_magician",
 	"rainhat",
 	"earmuffshat",
 	"catcoonhat",
 	"winterhat",
 	"beefalohat",
 	"deserthat",
+	"antlionhat",
 	"moonstorm_goggleshat",
 	"watermelonhat",
 	"icehat",
@@ -747,6 +756,8 @@ CRAFTING_FILTERS.FISHING.recipes =
 	"oceanfishingrod",
 	"fish_box",
 
+	"ocean_trawler_kit",
+
 	"oceanfishingbobber_ball",
 	"oceanfishingbobber_oval",
 	"oceanfishingbobber_crow",
@@ -823,6 +834,7 @@ CRAFTING_FILTERS.CONTAINERS.recipes =
 	"candybag",
 	"treasurechest",
 	"dragonflychest",
+	"magician_chest",
 	"icebox",
 	"saltbox",
 	"fish_box",
@@ -873,6 +885,7 @@ CRAFTING_FILTERS.STRUCTURES.recipes =
 
 	"treasurechest",
 	"dragonflychest",
+	"magician_chest",
 	"icebox",
 	"saltbox",
 
@@ -901,6 +914,7 @@ CRAFTING_FILTERS.STRUCTURES.recipes =
 	"moon_device_construction1",
 
 	"scarecrow",
+    "sewing_mannequin",
 
 	"fence_gate_item",
 	"fence_item",
@@ -922,6 +936,8 @@ CRAFTING_FILTERS.MAGIC.recipes =
 	"wereitem_goose",
 	"wereitem_beaver",
 	"wereitem_moose",
+	"tophat_magician",
+	"magician_chest",
 	"waxwelljournal",
 
 	"researchlab4",
@@ -934,6 +950,7 @@ CRAFTING_FILTERS.MAGIC.recipes =
 	"nightsword",
 	"batbat",
 	"armorslurper",
+	"antlionhat",
 	"purplegem",
 	"amulet",
 	"blueamulet",
@@ -1033,6 +1050,7 @@ CRAFTING_FILTERS.RAIN.recipes =
 	"strawhat",
 	"beehat",
 	"tophat",
+	"tophat_magician",
 	"minerhat",
 	"cookiecutterhat",
 	"rainhat",
@@ -1072,13 +1090,28 @@ CRAFTING_FILTERS.DECOR.recipes =
     "dock_kit",
 	"dock_woodposts_item",
 
+    "sewing_mannequin",
+
 	"turf_road",
 	"turf_woodfloor",
 	"turf_checkerfloor",
 	"turf_carpetfloor",
+	"turf_carpetfloor2",
+	"turf_mosaic_red",
+	"turf_mosaic_blue",
+	"turf_mosaic_grey",
 	"turf_dragonfly",
+	"turf_ruinsbrick",
+	"turf_ruinsbrick_glow",
+	"turf_ruinstiles",
+	"turf_ruinstiles_glow",
+	"turf_ruinstrim",
+	"turf_ruinstrim_glow",
+	"turf_archive",
+
 	"turf_pebblebeach",
 	"turf_shellbeach",
+	"turf_monkey_ground",
 
 	"turf_forest",
 	"turf_grass",
@@ -1094,7 +1127,6 @@ CRAFTING_FILTERS.DECOR.recipes =
 	"turf_fungus",
 	"turf_fungus_red",
 	"turf_fungus_green",
-	"turf_monkey_ground",
 
 	"ruinsrelic_plate",
 	"ruinsrelic_chipbowl",
